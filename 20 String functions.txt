@@ -1,0 +1,216 @@
+	1. CONCAT()
+	Concatenates two or more strings.
+	sql
+	Copy code
+	SELECT CONCAT('Hello', ' ', 'World'); -- Output: 'Hello World'
+	2. LEN() / LENGTH()
+	Returns the length of a string.
+	sql
+	Copy code
+	SELECT LEN('Hello'); -- SQL Server: Output: 5
+	SELECT LENGTH('Hello'); -- MySQL/PostgreSQL: Output: 5
+	3. TRIM()
+	Removes leading and trailing spaces from a string.
+	sql
+	Copy code
+	SELECT TRIM('   Hello World   '); -- Output: 'Hello World'
+	4. UPPER()
+	Converts a string to uppercase.
+	sql
+	Copy code
+	SELECT UPPER('Hello'); -- Output: 'HELLO'
+	5. LOWER()
+	Converts a string to lowercase.
+	sql
+	Copy code
+	SELECT LOWER('Hello'); -- Output: 'hello'
+	6. SUBSTRING() / MID()
+	Extracts a substring from a string.
+	sql
+	Copy code
+	SELECT SUBSTRING('Hello World', 1, 5); -- SQL Server: Output: 'Hello'
+	SELECT MID('Hello World', 1, 5); -- MySQL/PostgreSQL: Output: 'Hello'
+	7. REPLACE()
+	Replaces occurrences of a substring with another substring.
+	sql
+	Copy code
+	SELECT REPLACE('Hello World', 'World', 'SQL'); -- Output: 'Hello SQL'
+	8. CHARINDEX() / INSTR()
+	Finds the position of a substring in a string.
+	sql
+	Copy code
+	SELECT CHARINDEX('World', 'Hello World'); -- SQL Server: Output: 7
+	SELECT INSTR('Hello World', 'World'); -- MySQL/PostgreSQL: Output: 7
+	9. RIGHT()
+	Returns the right part of a string.
+	sql
+	Copy code
+	SELECT RIGHT('Hello World', 5); -- Output: 'World'
+	10. LEFT()
+	Returns the left part of a string.
+	sql
+	Copy code
+	SELECT LEFT('Hello World', 5); -- Output: 'Hello'
+	11. RTRIM()
+	Removes trailing spaces from a string.
+	sql
+	Copy code
+	SELECT RTRIM('Hello World   '); -- Output: 'Hello World'
+	12. LTRIM()
+	Removes leading spaces from a string.
+	sql
+	Copy code
+	SELECT LTRIM('   Hello World'); -- Output: 'Hello World'
+	13. FORMAT()
+	Formats a string, often used for numbers or dates.
+	sql
+	Copy code
+	SELECT FORMAT(1234567.89, 'C', 'en-US'); -- Output: '$1,234,567.89'
+	14. SOUNDEX()
+	Returns a phonetic representation of a string.
+	sql
+	Copy code
+	SELECT SOUNDEX('Smith'); -- Output: 'S530'
+	15. REVERSE()
+	Reverses the characters in a string.
+	sql
+	Copy code
+	SELECT REVERSE('Hello'); -- Output: 'olleH'
+	16. ASCII()
+	Returns the ASCII value of the first character of a string.
+	sql
+	Copy code
+	SELECT ASCII('A'); -- Output: 65
+	17. CHAR()
+	Converts an ASCII code to the corresponding character.
+	sql
+	Copy code
+	SELECT CHAR(65); -- Output: 'A'
+	18. STUFF()
+	Deletes a part of a string and inserts another string.
+	sql
+	Copy code
+	SELECT STUFF('Hello World', 6, 5, 'SQL'); -- Output: 'Hello SQL'
+	19. CONCAT_WS()
+	Concatenates strings with a separator.
+	sql
+	Copy code
+	SELECT CONCAT_WS('-', '2024', '11', '06'); -- Output: '2024-11-06'
+	20. SPACE()
+	Returns a string with a specified number of spaces.
+	sql
+	Copy code
+	SELECT SPACE(5); -- Output: '     '
+	21. FORMATMESSAGE()
+	Returns a formatted string with variables substituted.
+	sql
+	Copy code
+	SELECT FORMATMESSAGE('Hello %s!', 'World'); -- Output: 'Hello World!'
+	22. TRIM(LEADING/TRAILING)
+	Removes leading or trailing spaces (depending on the keyword).
+	sql
+	Copy code
+	SELECT TRIM(LEADING ' ' FROM '   Hello World   '); -- Output: 'Hello World   '
+	SELECT TRIM(TRAILING ' ' FROM '   Hello World   '); -- Output: '   Hello World'
+	23. REGEXP_REPLACE()
+	Replaces substrings matching a regular expression with another string.
+	sql
+	Copy code
+	SELECT REGEXP_REPLACE('Hello World', 'World', 'SQL'); -- MySQL/PostgreSQL: Output: 'Hello SQL'
+	24. REGEXP_LIKE()
+	Checks if a string matches a regular expression.
+	sql
+	Copy code
+	SELECT REGEXP_LIKE('Hello World', 'World'); -- Output: TRUE (PostgreSQL/MySQL)
+	25. REPEAT()
+	Repeats a string a specified number of times.
+	sql
+	Copy code
+	SELECT REPEAT('abc', 3); -- Output: 'abcabcabc'
+	26. INITCAP()
+	Capitalizes the first letter of each word in a string.
+	sql
+	Copy code
+	SELECT INITCAP('hello world'); -- Output: 'Hello World' (PostgreSQL)
+	27. LEFT() (Alternate in PostgreSQL)
+	Extracts a specified number of characters from the left of a string.
+	sql
+	Copy code
+	SELECT LEFT('Hello World', 5); -- Output: 'Hello' (PostgreSQL)
+	
+	
+	
+	
+				Select 'ABCDE'
+
+			Select Left('ABCDE', 1);
+			Select Left('ABCDE', 3);
+			Select RIGHT('ABCDE', 1);
+			Select Right('ABCDE', 3);
+
+			Select 'sara@aaa.com'
+
+			-- find index of @ symbol
+			-- charindex
+			select charindex('@','sara@aaa.com', 1)
+
+			--How many charter you want using Substring
+			select SUBSTRING('sara@aaa.com',
+							  charindex('@','sara@aaa.com', 1)+1,
+							  len('sara@aaa.com')-  charindex('@','sara@aaa.com', 1)) 
+						   
+
+			Select len('sara@aaa.com')-  charindex('@','sara@aaa.com', 1)
+
+
+			select SUBSTRING(Email ,
+							  charindex('@',Email, 1)+1,
+							  len(Email)-  charindex('@',Email, 1)) 
+							  from EmployeeMaster 
+							  
+							  
+							  
+		Select 'ABCDE'
+
+					Select Left('ABCDE', 1);
+					Select Left('ABCDE', 3);
+					Select RIGHT('ABCDE', 1);
+					Select Right('ABCDE', 3);
+
+					Select 'sara@aaa.com'
+
+					-- find index of @ symbol
+					-- charindex
+					select charindex('@','sara@aaa.com', 1)
+
+					--How many charter you want using Substring
+					select SUBSTRING('sara@aaa.com',
+									  charindex('@','sara@aaa.com', 1)+1,
+									  len('sara@aaa.com')-  charindex('@','sara@aaa.com', 1)) 
+								   
+
+					Select len('sara@aaa.com')-  charindex('@','sara@aaa.com', 1)
+
+					select count(*)
+					from (
+					select  Email , SUBSTRING(Email,
+									  charindex('@',Email, 1)+1,
+									  len(Email)-  charindex('@',Email, 1)) as Domain
+									  from EmployeeMaster) e  group by e.Domain 
+
+									  
+					SELECT e1.EmployeeID, e.emailcount, e.DomainName
+					FROM (
+						SELECT COUNT(*) AS emailcount,
+							   Email,
+							   SUBSTRING(Email, CHARINDEX('@', Email) + 1, LEN(Email) - CHARINDEX('@', Email)) AS DomainName
+						FROM EmployeeMaster
+						GROUP BY Email
+						HAVING COUNT(*) > 1
+					) e
+					INNER JOIN EmployeeMaster e1 ON e.Email = e1.Email
+					WHERE e1.EmployeeID IS NOT NULL;
+
+									  
+						   Select * from EmployeeMaster em  where email= 'ava.lopez@company.com'
+

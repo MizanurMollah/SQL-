@@ -1,0 +1,26 @@
+Identity Constraint:
+  If a column is marked as an identity column, then the values for this column are automatically
+  genereted, when insert a new row into the table.
+  
+  Syntex:
+   Create table tblparson
+   (
+   int indentity (1,1) primary key,
+   name nvarchar(20)
+   )
+   
+   Note: Seed and increment values are optional. if don't specify and identity the both default to 1.
+   
+   
+   To Explicity supply a values for identity column
+     1. First turn on identity insert - SET identity_insert tblparson On
+	 2. In the insert query specify the column list
+	     insert into tblparson(personID, Name) Values(2, 'john')
+		 
+ If have delete all the rows in a table, and you want to reset the identity column
+ values, Use DBCC checkident command.
+ 
+ DBCC Checkident ('Table_Name', Reseed, 0)
+ 
+ An explicit value for the identity column in the table 'schema.tablename'
+ can only be specified when a column list is used and identity_insert is ON.

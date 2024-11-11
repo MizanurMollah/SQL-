@@ -1,0 +1,116 @@
+TRY_PARSE Function 
+* It is Introduce In SQL Server 2012
+* Convert A string to date/Time Or NumericType
+* Return Null if the provided connot be converted to the
+Specified date type.
+* Required .net framework Common Runtime(CLR)
+
+SYNTAX: TRY_PARSE (Sting_value as data_Type)
+
+Exmple: As the String can be converted to Int, the result wi;;
+be 99.
+
+Select TRY_PARSE('99' as int) Result ----> 99
+
+Exmple: As the String cannot be convarted to Int, TRY_PARSE r
+Return Null
+
+Select TRY_PARSE ('ABC' as INT) AS result
+
+The TRY_PARSE function in SQL Server is used to convert a string expression to a specific data type. 
+It attempts to parse the input string, returning NULL if the conversion fails instead of throwing an error.
+ This is particularly useful for error handling when dealing with user input or uncertain data formats.
+
+Syntax
+sql
+Copy code
+TRY_PARSE ( string_value AS data_type [ USING culture ] )
+Parameters
+string_value: The input string that you want to convert. This can be a column name, a variable, or a literal string.
+
+data_type: The target data type you want to convert the string to. Common data types include:
+
+INT
+DECIMAL(p,s)
+DATETIME
+DATETIME2
+FLOAT
+SMALLINT
+BIGINT
+TIME
+CHAR(n), VARCHAR(n), NCHAR(n), NVARCHAR(n), etc.
+culture (optional): A string that specifies the culture in which to interpret the string. 
+This affects how dates, numbers, and currency are parsed. For example:
+
+'en-US' for US English
+'fr-FR' for French (France)
+Characteristics
+Null Handling: If string_value is NULL, TRY_PARSE returns NULL.
+Error Handling: Unlike the PARSE function, TRY_PARSE does not throw an error if the conversion fails; it simply returns NULL.
+Performance: It may have a slight overhead due to its error handling nature, but it is generally efficient for parsing operations.
+Examples
+Example 1: Basic Usage
+sql
+Copy code
+SELECT TRY_PARSE('123.45' AS DECIMAL(10,2)) AS ParsedValue;  -- Returns 123.45
+Example 2: Handling Invalid Input
+sql
+Copy code
+SELECT TRY_PARSE('abc' AS INT) AS ParsedValue;  -- Returns NULL
+Example 3: Using with Culture
+sql
+Copy code
+SELECT TRY_PARSE('12/31/2024' AS DATETIME USING 'en-US') AS ParsedDate;  -- Returns '2024-12-31'
+SELECT TRY_PARSE('31/12/2024' AS DATETIME USING 'fr-FR') AS ParsedDate;  -- Returns '2024-12-31'
+Example 4: Inserting Parsed Values into a Table
+sql
+Copy code
+CREATE TABLE ExampleTable (ID INT, Amount DECIMAL(10,2));
+
+INSERT INTO ExampleTable (ID, Amount)
+VALUES (1, TRY_PARSE('100.50' AS DECIMAL(10,2))), 
+       (2, TRY_PARSE('invalid' AS DECIMAL(10,2)));  -- Amount for ID 2 will be NULL
+Use Cases
+Data Validation: Validate and convert user input without throwing errors.
+Data Migration: Handle string representations of numbers or dates when importing data from various sources.
+Dynamic Queries: Allow for more flexible data parsing in dynamic SQL scenarios.
+Limitations
+Not a Replacement for All Conversions: While TRY_PARSE is great for handling potential errors, 
+it is not always the best choice for situations where performance is critical.
+Locale Dependency: Parsing can vary significantly based on the specified culture; incorrect 
+culture settings can lead to unexpected results.
+Only for String to Data Type: It cannot be used for converting other types directly to strings.
+Summary
+TRY_PARSE is a powerful function in SQL Server for converting strings to various data types
+ with built-in error handling, making it ideal for scenarios involving uncertain or 
+ inconsistent data formats. Use it to improve data quality and enhance your SQL scripts' 
+ robustness when working with user input or external data sources.
+
+
+
+Select  
+   case when TRY_PARSE ('ANC' as char) is null
+   then 'CONVERSION IS FALLED' 
+   else 'COnversion DONE'
+   end as DATADISPLAY
+
+SELECT
+    IIF(TRY_PARSE(CAST(Salary AS NVARCHAR(50)) AS INT) IS NOT NULL, 
+        'Conversion DONE', 
+        'CONVERSION HAS FAILED') AS SalaryStatus
+FROM 
+    Employees;
+
+
+	SELECT
+    IIF(PARSE(CAST(Salary AS NVARCHAR(50)) AS INT) IS NOT NULL, 
+        'Conversion DONE', 
+        'CONVERSION HAS FAILED') AS SalaryStatus
+FROM 
+    Employees;
+
+
+
+
+
+

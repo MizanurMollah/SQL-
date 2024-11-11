@@ -1,0 +1,25 @@
+Group By:
+     Group By clause to group a select set of rows into a set of 
+	 summary rows by the values of one or more column or expression.
+	 It is always used in conjunction with one or more agggegate function.
+	 
+	 Syntex:
+	 Select city, Sum(Salary) as TotalSalary from TblEmployee group by City.
+	 
+	 Note: If you omit, the Group By Clouse and try to execute the query, got an error
+	 Column 'tblEmployee.city' id invalid on the select list because it is not contained
+	 in either agggegate function or the group BY clase.
+	 
+	 Filtering Group:
+	     Where clase is used to filter rows before agggegate, where as HAVING clase is to 
+		 Filtering group after agggegate. 
+		 1.  Select City, Sum(salary) as TotalSalary from tblEmployee where city = 'London' group by City.
+		 and
+		 
+		 2. Select City, Sum(salary) as TotalSalary from  TblEmployee group by city having city = 'London'
+		 
+		 Note: Form A parformance a standpoint, you cannot say that one method is less efficient then the
+		 other, SQL Servar optimizer analysesm each statement and select an efficient way of executing it.
+		  As a best pratice. use the syntex That clearty describes the describes resultd. try to 
+		  eleminate rows that you wouldn't need as early as possible.
+		

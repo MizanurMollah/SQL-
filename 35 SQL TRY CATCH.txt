@@ -1,0 +1,270 @@
+What Is TRY...CATCH??
+
+ANS:  
+    TRY...CATCH in SQL Server is used to handle errors gracefully. 
+	The TRY block contains code that might fail, while the CATCH 
+	block executes if an error occurs, allowing you to manage 
+	issues like rolling back transactions or logging errors. 
+	This mechanism ensures that your operations remain controlled
+	 and resilient, even when unexpected errors arise.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--CREATE TABLE tblProduct (
+--    Productid INT PRIMARY KEY,
+--    Name VARCHAR(50),
+--    UnitPrice DECIMAL(10, 2),
+--    QtyAvailable INT
+--);
+
+--CREATE TABLE tblProductSales (
+--    ProductSalesid INT PRIMARY KEY,
+--    Productid INT,
+--    QuantitySold INT,
+--    FOREIGN KEY (Productid) REFERENCES tblProduct(Productid)
+--);
+
+
+--INSERT INTO tblProduct (Productid, Name, UnitPrice, QtyAvailable)
+--VALUES 
+--(1, 'Laptops', 2340.00, 90),
+--(2, 'Desktops', 3467.00, 50);
+
+--INSERT INTO tblProductSales (ProductSalesid, Productid, QuantitySold)
+--VALUES 
+--(1, 1, 10),
+--(2, 2, 10);
+
+Select * from tblProduct
+Select * from tblProductSales
+
+
+
+
+
+CREATE PROCEDURE Sp_SellProduct 
+				(
+					@ProductId INT,            -- The ID of the product to be sold
+					@QuantityToSell INT        -- The quantity of the product to be sold
+				)
+
+		AS
+		BEGIN
+				-- Declare a variable to hold the current stock quantity
+				DECLARE @StockAvailable INT;
+    
+				-- Get the available stock for the specified product
+				SELECT @StockAvailable = QtyAvailable 
+				FROM tblProduct
+				WHERE Productid = @ProductId;
+
+    -- Check if there is enough stock to proceed with the sale
+		IF (@StockAvailable < @QuantityToSell)
+		BEGIN
+				-- If not enough stock, raise an error and stop execution
+				RAISERROR('Not enough stock available', 16, 1);
+				RETURN;  -- Exit the procedure early
+    END
+
+		-- If enough stock is available, proceed with the sale
+		BEGIN TRANSACTION;
+
+    -- Reduce the stock quantity in the product table
+			UPDATE tblProduct 
+			SET QtyAvailable = QtyAvailable - @QuantityToSell
+			WHERE Productid = @ProductId;
+
+    -- Get the next ProductSalesid by finding the current maximum and adding 1
+				DECLARE @NewProductSalesId INT;
+				SELECT @NewProductSalesId = ISNULL(MAX(ProductSalesid), 0) + 1
+				FROM tblProductSales;
+
+    -- Insert the sale record into the sales table
+			INSERT INTO tblProductSales (ProductSalesid, Productid, QuantitySold)
+			VALUES (@NewProductSalesId, @ProductId, @QuantityToSell);
+
+		-- Commit the transaction to save the changes
+		COMMIT TRANSACTION;
+
+		-- Optionally, you can include a message to indicate the sale was successful
+		PRINT 'Sale completed successfully';
+END;
+
+-- Test Case 1: Enough stock available
+EXEC Sp_SellProduct @ProductId = 1, @QuantityToSell = 10;
+
+-- Test Case 2: Not enough stock available
+EXEC Sp_SellProduct @ProductId = 1, @QuantityToSell = 200;
+
+-- Test Case 3: Edge case - exact stock
+EXEC Sp_SellProduct @ProductId = 2, @QuantityToSell = 50;
+
+EXEC Sp_SellProduct @ProductId = 1, @QuantityToSell = 10;
+SELECT * FROM tblProduct;
+SELECT * FROM tblProductSales;
+-- Test Case 4: Selling zero quantity (should not make any changes)
+EXEC Sp_SellProduct @ProductId = 1, @QuantityToSell = 0;
+
+-- Check the product and sales tables to verify no changes
+SELECT * FROM tblProduct;
+SELECT * FROM tblProductSales;
+-- Test Case 5: Attempting to sell a negative quantity (should raise an error or handle it gracefully)
+EXEC Sp_SellProduct @ProductId = 1, @QuantityToSell = -5;
+
+-- Check the product and sales tables to verify no changes
+SELECT * FROM tblProduct;
+SELECT * FROM tblProductSales;
+-- Test Case 6: Attempting to sell a product that does not exist (should raise an error if ProductId is invalid)
+EXEC Sp_SellProduct @ProductId = 999, @QuantityToSell = 10;
+
+-- Check the product and sales tables to verify no changes
+SELECT * FROM tblProduct;
+SELECT * FROM tblProductSales;
+-- Test Case 7: Simulate concurrent transactions to ensure transaction handling is correct
+
+-- Start two transactions that attempt to sell the same product simultaneously
+BEGIN TRANSACTION;
+EXEC Sp_SellProduct @ProductId = 1, @QuantityToSell = 20;
+COMMIT TRANSACTION;
+
+BEGIN TRANSACTION;
+EXEC Sp_SellProduct @ProductId = 1, @QuantityToSell = 30;
+COMMIT TRANSACTION;
+
+-- Check the product and sales tables to verify if transactions were handled correctly
+SELECT * FROM tblProduct;
+SELECT * FROM tblProductSales;
+-- Test Case 8: Attempt to sell a very large quantity (ensure the system can handle it or raises appropriate errors)
+EXEC Sp_SellProduct @ProductId = 1, @QuantityToSell = 10000;
+
+-- Check the product and sales tables to verify the outcome
+SELECT * FROM tblProduct;
+SELECT * FROM tblProductSales;
+-- Test Case 9: Perform multiple sales on the same product and check if the sales are recorded correctly
+
+-- Sale 1
+EXEC Sp_SellProduct @ProductId = 2, @QuantityToSell = 10;
+
+-- Sale 2
+EXEC Sp_SellProduct @ProductId = 2, @QuantityToSell = 5;
+
+-- Sale 3
+EXEC Sp_SellProduct @ProductId = 2, @QuantityToSell = 20;
+
+-- Check the product and sales tables to verify the results
+SELECT * FROM tblProduct;
+SELECT * FROM tblProductSales;
+-- Test Case 10: Check if ProductSalesId is generated correctly in sequence
+
+-- Perform a sale to generate a new ProductSalesId
+EXEC Sp_SellProduct @ProductId = 1, @QuantityToSell = 1;
+
+-- Check the ProductSalesId values to ensure they are in sequence
+SELECT * FROM tblProductSales;
+
+
+-- Sale 1
+EXEC Sp_SellProduct @ProductId = 2, @QuantityToSell = 10;
+
+-- Sale 2
+EXEC Sp_SellProduct @ProductId = 2, @QuantityToSell = 5;
+
+-- Sale 3
+EXEC Sp_SellProduct @ProductId = 2, @QuantityToSell = 20;
+
+SELECT * FROM tblProduct;
+SELECT * FROM tblProductSales;
+
+Select * from tblProduct
+select * from tblProductSales
+exec Sp_sales_details 1,5
+
+
+
+
+ALTER PROCEDURE Sp_sales_details
+(
+    @ProductId INT,
+    @QuintityToSell INT
+)
+AS
+BEGIN
+    -- Check the product and sales details (for debugging or validation purposes)
+    --SELECT * FROM tblProduct WHERE ProductId = @ProductId;
+    --SELECT * FROM tblProductSales WHERE ProductId = @ProductId;
+
+    -- Declare a variable to hold the available stock
+    DECLARE @availableStock INT;
+
+    -- Get the available stock for the product
+    SELECT @availableStock = QtyAvailable FROM tblProduct WHERE ProductId = @ProductId;
+
+    -- Check if the product is available
+    IF @availableStock IS NULL
+    BEGIN
+        RAISERROR ('Stock Not Available', 16, 1);
+        RETURN;
+    END
+
+    -- Check if the available stock is less than the quantity to sell
+    IF @availableStock < @QuintityToSell
+    BEGIN
+        RAISERROR ('Insufficient stock for the product', 16, 1);
+        RETURN;
+    END
+    -- If sufficient stock is available, proceed with the transaction
+    ELSE
+    BEGIN
+        BEGIN TRY
+            -- Start the transaction
+            BEGIN TRANSACTION;
+
+            -- Reduce the quantity from the stock
+            UPDATE tblProduct 
+            SET QtyAvailable = QtyAvailable - @QuintityToSell 
+            WHERE ProductId = @ProductId;
+
+            -- Declare a variable to hold the new ProductSalesID
+            DECLARE @MaxProductID INT;
+
+            -- Get the maximum ProductSalesID from tblProductSales
+            SELECT @MaxProductID = ISNULL(MAX(ProductSalesid), 0) FROM tblProductSales;
+
+            -- Increment @MaxProductID by 1 to avoid primary key violation
+            SET @MaxProductID = @MaxProductID + 1;
+
+            -- Insert the sale record into tblProductSales
+            INSERT INTO tblProductSales 
+            VALUES (@MaxProductID, @ProductId, @QuintityToSell);
+
+            -- Commit the transaction
+            COMMIT TRANSACTION;
+        END TRY
+        BEGIN CATCH
+            -- Rollback the transaction in case of an error
+            ROLLBACK TRANSACTION;
+
+            -- Return the error details
+            SELECT 
+                ERROR_NUMBER() AS ErrorNumber,
+                ERROR_MESSAGE() AS ErrorMessage, 
+                ERROR_PROCEDURE() AS ErrorProcedure,
+                ERROR_STATE() AS ErrorState,
+                ERROR_SEVERITY() AS ErrorSeverity,
+                ERROR_LINE() AS ErrorLine;
+        END CATCH
+		Select * from tblProduct where ProductId = @ProductId
+		select * from tblProductSales where ProductId = @ProductId
+    END
+END;

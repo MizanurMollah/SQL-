@@ -1,0 +1,75 @@
+
+Logical Order of Operations in SQL:
+
+  1. From
+  2. JOIN
+  3. Where
+  4. GROUP by.
+  5. aggregate functions.
+  6. having.
+  7. window functions
+  8. select
+  9. Distinct
+  10. uninon/ intersect/ except.
+  11. order by.
+  12. offset.
+  13. limit/ fetch/ top
+
+
+
+
+
+
+
+
+
+
+Example SQL Query
+sql
+Copy code
+SELECT Department, COUNT(*) AS TotalEmployees 
+FROM Employees 
+JOIN Departments ON Employees.DeptID = Departments.ID 
+WHERE Salary > 50000 
+GROUP BY Department 
+HAVING COUNT(*) > 5 
+ORDER BY TotalEmployees DESC 
+LIMIT 10;
+Logical Order of Operations Explained
+FROM: Identify the source table.
+
+Example: FROM Employees
+JOIN: Combine rows from the Employees and Departments tables.
+
+Example: JOIN Departments ON Employees.DeptID = Departments.ID
+WHERE: Filter the rows based on specified conditions.
+
+Example: WHERE Salary > 50000
+GROUP BY: Group the filtered rows by department.
+
+Example: GROUP BY Department
+HAVING: Filter the groups based on aggregate conditions.
+
+Example: HAVING COUNT(*) > 5
+SELECT: Specify the columns to be returned.
+
+Example: SELECT Department, COUNT(*) AS TotalEmployees
+ORDER BY: Sort the results based on total employees.
+
+Example: ORDER BY TotalEmployees DESC
+LIMIT: Restrict the number of rows returned.
+
+Example: LIMIT 10
+Summary
+The logical order of operations in SQL is:
+
+ 1. FROM
+ 2. JOIN
+ 3. WHERE
+ 4. GROUP BY
+ 5. HAVING
+ 6. SELECT
+ 7. ORDER BY
+ 8.LIMIT / TOP
+This execution flow ensures SQL processes queries efficiently, producing the desired output.
+

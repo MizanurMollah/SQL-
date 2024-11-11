@@ -1,0 +1,51 @@
+   Advantages Of Stored Procedure:
+   
+   Stored Procedure:
+   
+   A stored procedure is a precompiled set of SQL statements
+   that perform specific database operations, improving performance and maintainability.
+   
+   1. Execution Plan Retention and Reusebility.
+   2. Code Reusebility and better maintainability.
+   3. Reduces Network Traffic
+   4. better Sqcurity.
+   5. Avoids SQL Injection Attecks
+   
+
+
+
+
+
+Key Differences Between MS SQL and PostgreSQL for Output Parameters
+
+
+Feature	MS SQL Server	PostgreSQL
+
+
+Procedure Definition	CREATE PROCEDURE with OUTPUT keyword								CREATE PROCEDURE with OUT keyword for output parameters.
+
+Returning Values		Output parameters return values after execution						OUT parameters return values directly after execution
+
+Execution Command		EXEC to run the stored procedure									CALL to invoke the procedure
+
+Variable Declaration	Declare an output variable before calling the procedure	OUT 		parameters do not require external variable declaration
+Syntax					@parameter OUTPUT													OUT parameter_name
+
+
+
+
+Best Practices for Stored Procedures with Output Parameters
+
+
+		Parameter Naming: Use clear, descriptive names for parameters (e.g., @EmployeeID, @Salary) to indicate their purpose.
+		
+		Error Handling: Ensure you handle possible errors, such as no results found or invalid input, within the stored procedure.
+		
+		Use of Transactions: For procedures that modify data, wrap operations in a transaction to maintain consistency.
+		
+		Avoid Large Result Sets: Use output parameters to return specific, essential data instead of returning large result sets.
+		
+		
+		
+		
+

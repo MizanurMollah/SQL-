@@ -1,0 +1,135 @@
+/*What is a Cursor?
+A cursor is like a pointer that allows you to work with individual rows 
+of a result set one at a time. It’s useful when you need to perform 
+operations on each row individually, rather than on the whole set at once.
+
+When to Use Cursors?
+Row-by-Row Processing: When you need to process or analyze each row of a result set individually.
+Complex Operations: When operations cannot be performed using set-based queries.
+Basic Steps to Use a Cursor
+Here’s a step-by-step guide with a simple example to make it clearer:
+
+1. Declare the Cursor
+First, you define what data the cursor will work with. This is done by writing a query.
+*/
+-- Declare variables to hold data from each row
+DECLARE @ProductId INT;
+DECLARE @ProductName NVARCHAR(50);
+DECLARE @ProductDescription NVARCHAR(250);
+
+-- Declare the cursor with a query
+DECLARE product_cursor CURSOR FOR
+SELECT Id, Name, Description
+FROM tblProducts;
+--Explanation: You declare a cursor named product_cursor and specify that it will retrieve Id, Name, and Description from the tblProducts table.
+--2. Open the Cursor
+--You need to open the cursor to start working with the data.
+
+-- Open the cursor to establish the result set
+
+
+OPEN product_cursor;
+--Explanation: This makes the data available for fetching.
+
+
+--3. Fetch Rows
+--Retrieve each row one at a time from the cursor.
+
+-- Fetch the first row of data into the declared variables
+
+FETCH NEXT FROM product_cursor INTO @ProductId, @ProductName, @ProductDescription;
+
+
+
+--Explanation: This gets the first row of data and stores it in the variables @ProductId, @ProductName, and @ProductDescription.
+--4. Process Each Row
+--Process the data as needed (e.g., print it, update it, etc.).
+
+--sql
+--Copy code
+-- Loop through all rows
+
+
+WHILE @@FETCH_STATUS = 0
+BEGIN
+    -- Print the data (or perform other operations)
+    PRINT 'Product ID: ' + CAST(@ProductId AS NVARCHAR(10)) + 
+          ', Name: ' + @ProductName + 
+          ', Description: ' + @ProductDescription;
+    
+    -- Fetch the next row
+    FETCH NEXT FROM product_cursor INTO @ProductId, @ProductName, @ProductDescription;
+END;
+
+
+--Explanation: The WHILE loop continues as long as there are more rows (@@FETCH_STATUS = 0).
+--Each row is processed inside the loop. After processing a row, the next row is fetched.
+--5. Close the Cursor
+--Once you’re done processing all rows, close the cursor.
+
+--sql
+--Copy code
+-- Close the cursor
+
+--CLOSE product_cursor;
+--Explanation: This releases the cursor’s hold on the data.
+--6. Deallocate the Cursor
+--Finally, remove the cursor definition to free up resources.
+
+--sql
+--Copy code
+-- Deallocate the cursor
+
+
+DEALLOCATE product_cursor;
+
+
+--Explanation: This completely removes the cursor and cleans up any resources it was using.
+--Full Example
+--Putting it all together:
+
+--sql
+--Copy code
+
+
+-- Step 1: Declare the cursor
+
+
+DECLARE @ProductId INT;
+DECLARE @ProductName NVARCHAR(50);
+DECLARE @ProductDescription NVARCHAR(250);
+
+DECLARE product_cursor CURSOR FOR
+SELECT Id, Name, Description
+FROM tblProducts;
+
+-- Step 2: Open the cursor
+OPEN product_cursor;
+
+-- Step 3: Fetch the first row
+FETCH NEXT FROM product_cursor INTO @ProductId, @ProductName, @ProductDescription;
+
+-- Step 4: Process each row
+WHILE @@FETCH_STATUS = 0
+BEGIN
+    -- Print the product details
+    PRINT 'Product ID: ' + CAST(@ProductId AS NVARCHAR(10)) + 
+          ', Name: ' + @ProductName + 
+          ', Description: ' + @ProductDescription;
+    
+    -- Fetch the next row
+    FETCH NEXT FROM product_cursor INTO @ProductId, @ProductName, @ProductDescription;
+END;
+
+-- Step 5: Close the cursor
+CLOSE product_cursor;
+
+-- Step 6: Deallocate the cursor
+DEALLOCATE product_cursor;
+--Summary
+--Declare the cursor to specify which data to work with.
+--Open the cursor to start using it.
+--Fetch rows one at a time and process each one.
+--Close the cursor when done.
+--Deallocate it to free resources.
+--Cursors are powerful but can be less efficient than set-based operations. Use them when necessary, and make sure to manage them carefully to avoid performance issues.

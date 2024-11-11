@@ -1,0 +1,147 @@
+SQL LEARING NOTE:
+
+/*DML trigger INSERT, UPDATE, DELETE
+
+-- SQL HAVE 3 Type of triggers
+	1. DML trigger.
+	2. DDL Trigger.
+	3. LOGON trigger.
+	
+	DML trigger :-
+	    * DML trigger are fire automatically in response to DML Events(Such as INSERT, UPDATE OR DELETE)
+	    
+	DML trigger types:
+		DML trigger are two types:
+		1. After Triggers (Sometimes called as ForTrigger)
+		2. Instead of Trigger.
+
+	** After trigger, fires after the trigger action.(Such as INSERT, UPDATE, and DELETE)
+
+	** INSTEAD of trigger, fires instead of the triggering action, So, the insert, update & delete statements, 
+	causes in an instead trigger are trigger to fire INSTEAD of the
+	respective action excetion.
+*/
+
+SQL Learning Note: Triggers
+Types of SQL Triggers
+SQL has three types of triggers:
+
+DML Trigger (Data Manipulation Language Trigger)
+DDL Trigger (Data Definition Language Trigger)
+LOGON Trigger
+DML Trigger
+DML triggers automatically fire in response to DML events such as INSERT, UPDATE, or DELETE.
+
+Types of DML Triggers:
+AFTER Trigger (Sometimes called FOR Trigger)
+Fires after the triggering action (INSERT, UPDATE, DELETE) is performed.
+INSTEAD OF Trigger
+Fires instead of the triggering action, so the action (INSERT, UPDATE, DELETE) specified in the trigger definition replaces the original action.
+Examples of DML Triggers
+1. AFTER INSERT Trigger
+This trigger will execute after a new row is inserted into the Employees table.
+
+
+			CREATE TRIGGER trg_AfterInsertEmployee
+			ON Employees
+			AFTER INSERT
+			AS
+			BEGIN
+				-- Insert a log entry into the AuditLog table
+				INSERT INTO AuditLog (Action, ActionDate, EmployeeID)
+				SELECT 'INSERT', GETDATE(), EmployeeID
+				FROM inserted;
+			END;
+Explanation:
+
+AFTER INSERT means this trigger runs after a new row is added to the Employees table.
+The inserted table holds the newly inserted rows.
+The trigger inserts a record into AuditLog with the action details.
+
+
+2. AFTER UPDATE Trigger
+This trigger will execute after an existing row in the Employees table is updated.
+
+			CREATE TRIGGER trg_AfterUpdateEmployee
+			ON Employees
+			AFTER UPDATE
+			AS
+			BEGIN
+				-- Insert a log entry into the AuditLog table
+				INSERT INTO AuditLog (Action, ActionDate, EmployeeID)
+				SELECT 'UPDATE', GETDATE(), EmployeeID
+				FROM inserted;
+			END;
+			
+			
+			
+Certainly! Here’s a detailed learning note on SQL triggers, with examples for INSERT, UPDATE, and DELETE triggers:
+
+SQL Learning Note: Triggers
+Types of SQL Triggers
+SQL has three types of triggers:
+
+DML Trigger (Data Manipulation Language Trigger)
+DDL Trigger (Data Definition Language Trigger)
+LOGON Trigger
+DML Trigger
+DML triggers automatically fire in response to DML events such as INSERT, UPDATE, or DELETE.
+
+Types of DML Triggers:
+AFTER Trigger (Sometimes called FOR Trigger)
+Fires after the triggering action (INSERT, UPDATE, DELETE) is performed.
+INSTEAD OF Trigger
+Fires instead of the triggering action, so the action (INSERT, UPDATE, DELETE) specified in the trigger definition replaces the original action.
+Examples of DML Triggers
+1. AFTER INSERT Trigger
+This trigger will execute after a new row is inserted into the Employees table.
+
+sql
+Copy code
+CREATE TRIGGER trg_AfterInsertEmployee
+ON Employees
+AFTER INSERT
+AS
+BEGIN
+    -- Insert a log entry into the AuditLog table
+    INSERT INTO AuditLog (Action, ActionDate, EmployeeID)
+    SELECT 'INSERT', GETDATE(), EmployeeID
+    FROM inserted;
+END;
+Explanation:
+
+AFTER INSERT means this trigger runs after a new row is added to the Employees table.
+The inserted table holds the newly inserted rows.
+The trigger inserts a record into AuditLog with the action details.
+2. AFTER UPDATE Trigger
+This trigger will execute after an existing row in the Employees table is updated.
+
+sql
+Copy code
+CREATE TRIGGER trg_AfterUpdateEmployee
+ON Employees
+AFTER UPDATE
+AS
+BEGIN
+    -- Insert a log entry into the AuditLog table
+    INSERT INTO AuditLog (Action, ActionDate, EmployeeID)
+    SELECT 'UPDATE', GETDATE(), EmployeeID
+    FROM inserted;
+END;
+Explanation:
+
+AFTER UPDATE means this trigger runs after a row is modified in the Employees table.
+The inserted table contains the updated rows.
+The trigger logs the update action into AuditLog.
+
+
+			CREATE TRIGGER trg_AfterDeleteEmployee
+			ON Employees
+			AFTER DELETE
+			AS
+			BEGIN
+				-- Insert a log entry into the AuditLog table
+				INSERT INTO AuditLog (Action, ActionDate, EmployeeID)
+				SELECT 'DELETE', GETDATE(), EmployeeID
+				FROM deleted;
+			END;

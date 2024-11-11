@@ -1,0 +1,212 @@
+Row numbering in SQL Server can be achieved using the ROW_NUMBER() function. This function assigns a unique sequential integer to rows within a partition of a result set, starting at 1 for the first row in each partition.
+
+Here’s a detailed guide on how to use ROW_NUMBER() along with examples:
+
+1. Basic Usage of ROW_NUMBER()
+The ROW_NUMBER() function requires an OVER() clause, where you specify the ordering of rows. Here’s a simple example:
+
+sql
+Copy code
+SELECT 
+    Name,
+    Salary,
+    ROW_NUMBER() OVER (ORDER BY Salary DESC) AS RowNum
+FROM 
+    Employee;
+In this query:
+
+ROW_NUMBER() assigns a unique number to each row based on the ORDER BY clause, which orders rows by Salary in descending order.
+RowNum is the alias for the column containing the row numbers.
+2. Using ROW_NUMBER() with Partitioning
+You can partition the result set into groups and then apply ROW_NUMBER() within each partition. This is useful if you want to restart numbering for each partition.
+
+sql
+Copy code
+SELECT 
+    DepartmentID,
+    Name,
+    Salary,
+    ROW_NUMBER() OVER (PARTITION BY DepartmentID ORDER BY Salary DESC) AS RowNum
+FROM 
+    Employee;
+In this query:
+
+PARTITION BY DepartmentID divides the result set into partitions by DepartmentID.
+ROW_NUMBER() resets the numbering for each DepartmentID, so each department starts numbering from 1.
+3. Examples
+Assuming we have the following Employee table:
+
+EmployeeID	Name	Gender	Salary	DepartmentID
+1	Mark	Male	50000	1
+2	Sara	Female	39000	2
+3	Mary	Female	60000	3
+4	John	Male	56000	1
+5	Steve	Male	45000	2
+6	Alice	Female	47000	3
+7	Bob	Male	52000	4
+8	Nina	Female	49000	5
+9	Tom	Male	53000	1
+10	Lily	Female	55000	3
+Query for Basic Row Numbering:
+
+sql
+Copy code
+SELECT 
+    Name,
+    Salary,
+    ROW_NUMBER() OVER (ORDER BY Salary DESC) AS RowNum
+FROM 
+    Employee;
+Result:
+
+Name	Salary	RowNum
+Mary	60000	1
+Lily	55000	2
+John	56000	3
+Tom	53000	4
+Mark	50000	5
+Alice	47000	6
+Bob	52000	7
+Steve	45000	8
+Sara	39000	9
+Nina	49000	10
+Query with Partitioning:
+
+sql
+Copy code
+SELECT 
+    DepartmentID,
+    Name,
+    Salary,
+    ROW_NUMBER() OVER (PARTITION BY DepartmentID ORDER BY Salary DESC) AS RowNum
+FROM 
+    Employee;
+Result:
+
+DepartmentID	Name	Salary	RowNum
+1	Mark	50000	1
+1	John	56000	2
+1	Tom	53000	3
+2	Steve	45000	1
+2	Sara	39000	2
+3	Mary	60000	1
+3	Lily	55000	2
+3	Alice	47000	3
+4	Bob	52000	1
+5	Nina	49000	1
+Summary
+ROW_NUMBER(): Assigns a unique number to each row within the result set or within partitions of the result set.
+ORDER BY: Defines the order in which the row numbers are assigned.
+PARTITION BY: Divides the result set into partitions to restart row numbering within each partition.
+This functionality is useful for pagination, ranking, or ordering results in a specific manner. Let me know if you need more details or additional examples!
+
+
+
+
+
+
+The ROW_NUMBER() function in SQL Server is used for various purposes, primarily involving the assignment of unique sequential integers to rows in a result set. Here are some common use cases:
+
+1. Pagination
+ROW_NUMBER() is often used for pagination in applications. When dealing with large datasets, you might need to display results in chunks or pages. The ROW_NUMBER() function helps to create a sequence of rows, which can then be used to fetch specific pages.
+
+Example: Fetching a specific page of results
+
+sql
+Copy code
+WITH NumberedResults AS (
+    SELECT 
+        Name,
+        Salary,
+        ROW_NUMBER() OVER (ORDER BY Salary DESC) AS RowNum
+    FROM 
+        Employee
+)
+SELECT 
+    Name,
+    Salary
+FROM 
+    NumberedResults
+WHERE 
+    RowNum BETWEEN 11 AND 20;  -- Page 2, assuming 10 rows per page
+2. Ranking
+ROW_NUMBER() can be used to assign ranks to rows based on a specific ordering criterion. Unlike RANK() or DENSE_RANK(), ROW_NUMBER() does not handle ties and always provides a unique row number.
+
+Example: Ranking employees by salary
+
+sql
+Copy code
+SELECT 
+    Name,
+    Salary,
+    ROW_NUMBER() OVER (ORDER BY Salary DESC) AS Rank
+FROM 
+    Employee;
+3. Identifying Duplicates
+You can use ROW_NUMBER() to identify and remove duplicates from a dataset. By partitioning the data and numbering the rows, you can keep only the first occurrence of each duplicate.
+
+Example: Removing duplicates
+
+sql
+Copy code
+WITH NumberedDuplicates AS (
+    SELECT 
+        Name,
+        Salary,
+        ROW_NUMBER() OVER (PARTITION BY Name ORDER BY Salary DESC) AS RowNum
+    FROM 
+        Employee
+)
+DELETE FROM NumberedDuplicates
+WHERE RowNum > 1;
+4. Top N Records per Group
+When you need to retrieve the top N records for each group within a dataset, ROW_NUMBER() can be used to assign numbers within partitions and then filter based on that number.
+
+Example: Top 3 highest-paid employees in each department
+
+sql
+Copy code
+WITH RankedEmployees AS (
+    SELECT 
+        DepartmentID,
+        Name,
+        Salary,
+        ROW_NUMBER() OVER (PARTITION BY DepartmentID ORDER BY Salary DESC) AS RowNum
+    FROM 
+        Employee
+)
+SELECT 
+    DepartmentID,
+    Name,
+    Salary
+FROM 
+    RankedEmployees
+WHERE 
+    RowNum <= 3;  -- Top 3 highest-paid employees
+5. Ordering within Groups
+You can use ROW_NUMBER() to order rows within specific groups, which can be helpful for reporting and analytics.
+
+Example: Listing employees in each department with sequential numbering
+
+sql
+Copy code
+SELECT 
+    DepartmentID,
+    Name,
+    Salary,
+    ROW_NUMBER() OVER (PARTITION BY DepartmentID ORDER BY Salary ASC) AS RowNum
+FROM 
+    Employee;
+Summary
+Pagination: Dividing a large result set into pages for easier viewing.
+Ranking: Assigning ranks to rows based on a specific order.
+Identifying Duplicates: Finding and removing duplicate records.
+Top N Records: Fetching the top N records within each group.
+Ordering within Groups: Providing sequential numbers within partitions.
+The ROW_NUMBER() function is a versatile tool for organizing and manipulating data in SQL Server. Let me know if you need more specific examples or have any other questions!
+
+
+
+
+
+

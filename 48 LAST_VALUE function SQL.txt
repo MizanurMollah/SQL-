@@ -1,0 +1,76 @@
+SQL LAST_VALUE Function
+The LAST_VALUE function retrieves the last value in an ordered set of 
+rows within a specified window. This is particularly useful for data analysis, 
+where understanding the last occurrence of a value is crucial.
+
+Syntax
+sql
+Copy code
+LAST_VALUE(column_name) OVER (
+    [PARTITION BY partition_column]
+    ORDER BY order_column
+    [ROWS | RANGE frame_clause]
+)
+Parameters
+column_name: The target column from which to extract the last value.
+PARTITION BY partition_column: (Optional) Divides the result set into partitions.
+ The LAST_VALUE function operates independently within each partition.
+ORDER BY order_column: Specifies the order in which the rows are processed within the window.
+ROWS | RANGE frame_clause: Defines the window frame, which can be set to include s
+pecific rows or a logical range of values.
+Example: Retrieve Last Salary by Gender
+Let’s illustrate the LAST_VALUE function using an Employees table. We want to 
+find the last salary within each gender group.
+
+Sample Data: Employees Table
+Name	Gender	Salary
+John	Male	1000
+Mark	Male	1200
+Steve	Male	1500
+Sarah	Female	1300
+Lucy	Female	1400
+Anna	Female	1600
+SQL Query
+sql
+Copy code
+SELECT 
+    Name, 
+    Gender, 
+    Salary, 
+    LAST_VALUE(Salary) OVER (
+        PARTITION BY Gender 
+        ORDER BY Salary 
+        ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+    ) AS LastSalary
+FROM 
+    Employees;
+Explanation
+LAST_VALUE(Salary): Fetches the last salary value within the defined window.
+PARTITION BY Gender: Ensures that the last salary is computed separately for each gender category.
+ORDER BY Salary: Orders the salaries within each partition to determine the last one.
+ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING: Includes all rows in the partition,
+ allowing the LAST_VALUE function to capture the true last value.
+Result Set
+Name	Gender	Salary	LastSalary
+John	Male	1000	1500
+Mark	Male	1200	1500
+Steve	Male	1500	1500
+Sarah	Female	1300	1600
+Lucy	Female	1400	1600
+Anna	Female	1600	1600
+Key Takeaways
+Consistent Results: The LastSalary column reflects the last salary in each gender partition, 
+demonstrating how the LAST_VALUE function works effectively.
+Flexible Usage: You can modify the ORDER BY and PARTITION BY clauses to suit various analytical needs.
+Conclusion
+The LAST_VALUE function is a powerful tool for data analysis in SQL, allowing you to easily 
+retrieve the last occurrence of values within specified partitions. Whether you’re working with employee data, sales figures, or other datasets, mastering this function can enhance your data reporting and insights.
+
+If you have any specific elements or examples you want to focus on, or if you'd like further
+ enhancements, feel free to ask!
+
+
+
+
+
+

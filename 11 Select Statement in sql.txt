@@ -1,0 +1,25 @@
+Use Of select:
+  1. Select Specific of all columns.
+  2. Distinct Rows.
+  3. Filtering with where clsuuse.
+  4. Wild card in SQL servar.
+  5. Joining multiple condition using AND and or Operator.
+  6. Sorting rows using order by.
+  7. Select top n or top percentage of rows.
+  
+  operators.
+  
+   = Equal top
+   != or <> not equal top
+   > grater then
+   >= Grater then or equal top
+   < less then
+   <= less then or equal top
+   IN Specify a list of values
+   BETWEEN Specify a range
+   LIKE Specify a pattern
+   NOt Not in a list, range etc..
+   % Specifies zero or more charaters
+   - Specifies Exactly one charater
+   [] any charater with in the brackets
+   [^] Not any charaters with in the Brackets.

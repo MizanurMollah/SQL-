@@ -1,0 +1,177 @@
+/* 
+  ==========================================
+  Step 1: Create the 'Employees' table 
+  ==========================================
+  This table will store employee data with three fields:
+    - Id:      Unique Employee ID (Primary Key)
+    - Name:    The name of the employee
+    - Gender:  The gender of the employee (Male/Female)
+*/
+--Drop Table EmpTableType
+
+/* 
+  ==========================================
+  Step 1: Drop the Stored Procedure if it exists
+  ==========================================
+  This ensures the procedure is removed before dropping the table type.
+*/
+--IF OBJECT_ID('SpInsertEmployees', 'P') IS NOT NULL
+--BEGIN
+--    DROP PROCEDURE SpInsertEmployees;
+--    PRINT 'Stored procedure ''SpInsertEmployees'' dropped successfully.';
+--END
+--ELSE
+--BEGIN
+--    PRINT 'Stored procedure ''SpInsertEmployees'' does not exist.';
+--END
+
+/* 
+  ==========================================
+  Step 2: Drop the User-Defined Table Type if it exists
+  ==========================================
+  Now that the stored procedure has been dropped, you can drop the table type.
+*/
+--IF EXISTS (SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'EmpTableType')
+--BEGIN
+--    DROP TYPE EmpTableType;
+--    PRINT 'User-defined table type ''EmpTableType'' dropped successfully.';
+--END
+--ELSE
+--BEGIN
+--    PRINT 'User-defined table type ''EmpTableType'' does not exist.';
+--END
+
+
+CREATE TABLE Employees
+(
+    Id INT PRIMARY KEY,          -- Employee ID (unique for each employee)
+    Name NVARCHAR(50),           -- Employee Name
+    Gender NVARCHAR(10)          -- Gender (Male/Female)
+);
+
+-- Output message to indicate table creation
+PRINT 'Step 1: Employees table created successfully.';
+
+
+/* 
+  ==========================================
+  Step 2: Create a User-Defined Table Type 
+  ==========================================
+  This table type, named 'EmpTableType', will be used to pass a table as a parameter 
+  to the stored procedure. It has the same structure as the 'Employees' table.
+*/
+CREATE TYPE EmpTableType AS TABLE
+(
+    Id INT PRIMARY KEY,          -- Employee ID (same as in the 'Employees' table)
+    Name NVARCHAR(50),           -- Employee Name
+    Gender NVARCHAR(10)          -- Gender (Male/Female)
+);
+
+-- Output message to indicate the creation of the table type
+PRINT 'Step 2: User-defined table type ''EmpTableType'' created successfully.';
+
+
+/* 
+  ==========================================
+  Step 3: Create a Stored Procedure 
+  ==========================================
+  The stored procedure 'SpInsertEmployees' takes the 'EmpTableType' as a READONLY parameter
+  and inserts the data from the table type into the 'Employees' table.
+*/
+CREATE PROCEDURE SpInsertEmployees
+(
+    @EmpTableType EmpTableType READONLY -- Table type parameter (READONLY)
+)
+AS
+BEGIN
+    -- Insert the data from the table type into the 'Employees' table
+    INSERT INTO Employees (Id, Name, Gender)
+    SELECT Id, Name, Gender FROM @EmpTableType;
+    
+    -- Output message to confirm successful data insertion
+    PRINT 'Step 3: Employees inserted successfully into the Employees table.';
+END;
+
+-- Output message to indicate stored procedure creation
+PRINT 'Step 3: Stored procedure ''SpInsertEmployees'' created successfully.';
+
+
+/* 
+  ==========================================
+  Step 4: Declare a Table Variable 
+  ==========================================
+  Declare a variable of type 'EmpTableType' to hold temporary employee data.
+*/
+DECLARE @EmployeeTableType EmpTableType;
+
+-- Output message to indicate table variable declaration
+PRINT 'Step 4: Table variable @EmployeeTableType declared successfully.';
+
+
+/* 
+  ==========================================
+  Step 5: Insert Data into the Table Variable 
+  ==========================================
+  Inserting 30 rows of sample employee data into the table variable.
+*/
+INSERT INTO @EmployeeTableType (Id, Name, Gender)
+VALUES
+    (1, 'John', 'Male'),
+    (2, 'Jane', 'Female'),
+    (3, 'Mark', 'Male'),
+    (4, 'Lucy', 'Female'),
+    (5, 'Tom', 'Male'),
+    (6, 'Sara', 'Female'),
+    (7, 'Alex', 'Male'),
+    (8, 'Emma', 'Female'),
+    (9, 'James', 'Male'),
+    (10, 'Olivia', 'Female'),
+    (11, 'Liam', 'Male'),
+    (12, 'Sophia', 'Female'),
+    (13, 'Noah', 'Male'),
+    (14, 'Mia', 'Female'),
+    (15, 'Ethan', 'Male'),
+    (16, 'Isabella', 'Female'),
+    (17, 'Logan', 'Male'),
+    (18, 'Ava', 'Female'),
+    (19, 'Lucas', 'Male'),
+    (20, 'Charlotte', 'Female'),
+    (21, 'Mason', 'Male'),
+    (22, 'Amelia', 'Female'),
+    (23, 'Benjamin', 'Male'),
+    (24, 'Harper', 'Female'),
+    (25, 'Elijah', 'Male'),
+    (26, 'Evelyn', 'Female'),
+    (27, 'Oliver', 'Male'),
+    (28, 'Lily', 'Female'),
+    (29, 'Jacob', 'Male'),
+    (30, 'Ella', 'Female');
+
+-- Output message to confirm data insertion into the table variable
+PRINT 'Step 5: Data inserted into @EmployeeTableType successfully.';
+
+
+/* 
+  ==========================================
+  Step 6: Execute the Stored Procedure 
+  ==========================================
+  Now execute the stored procedure 'SpInsertEmployees' by passing the
+  @EmployeeTableType variable as a parameter.
+*/
+EXEC SpInsertEmployees @EmployeeTableType;
+
+-- Output message to confirm the execution of the stored procedure
+PRINT 'Step 6: Stored procedure executed successfully.';
+
+
+/* 
+  ==========================================
+  Step 7: Verify Data Insertion
+  ==========================================
+  Select all records from the 'Employees' table to verify that the data
+  has been inserted correctly.
+*/
+SELECT * FROM Employees;
+
+-- Output message to confirm data verification
+PRINT 'Step 7: Data successfully retrieved from Employees table.';

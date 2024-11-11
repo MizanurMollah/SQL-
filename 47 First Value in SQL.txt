@@ -1,0 +1,98 @@
+It looks like you want to retrieve the first value in each partition and use 
+it in further calculations or comparisons. In SQL, you can achieve this by using window functions like FIRST_VALUE or by combining window functions with PARTITION BY.
+
+1. Using FIRST_VALUE Function
+The FIRST_VALUE function returns the first value in an ordered set of values within a partition.
+
+Syntax:
+sql
+Copy code
+FIRST_VALUE(column_name) OVER (PARTITION BY partition_column ORDER BY order_column)
+column_name: The column from which to get the first value.
+PARTITION BY partition_column: Divides the result set into partitions, and the 
+FIRST_VALUE function operates on each partition independently.
+ORDER BY order_column: Defines the order within the partition, based on which the first value is determined.
+Example with FIRST_VALUE
+Let’s use the same Employees table and retrieve the first Salary value within each Gender partition:
+
+Table: Employees
+Name	Gender	Salary
+John	Male	1000
+Steve	Male	1500
+Mark	Male	1200
+Sarah	Female	1300
+Lucy	Female	1400
+Anna	Female	1600
+Query: Get First Salary in Each Gender Partition
+sql
+Copy code
+SELECT Name, Gender, Salary, 
+       FIRST_VALUE(Salary) OVER (PARTITION BY Gender ORDER BY Salary) AS FirstSalary
+FROM Employees;
+Explanation:
+FIRST_VALUE(Salary): Retrieves the first salary within each partition.
+PARTITION BY Gender: Partitions the data by Gender so that each gender group is handled separately.
+ORDER BY Salary: Within each partition, the rows are ordered by Salary, so the first salary is the smallest one.
+Output:
+Name	Gender	Salary	FirstSalary
+John	Male	1000	1000
+Mark	Male	1200	1000
+Steve	Male	1500	1000
+Sarah	Female	1300	1300
+Lucy	Female	1400	1300
+Anna	Female	1600	1300
+2. Using the First Value in Calculations
+You can use the FIRST_VALUE result in further calculations. For example, you might want to compare each employee’s salary with the first salary in their gender group.
+
+Query: Calculate the Difference Between Each Employee’s Salary and the First Salary in Their Gender Group
+sql
+Copy code
+SELECT Name, Gender, Salary, 
+       FIRST_VALUE(Salary) OVER (PARTITION BY Gender ORDER BY Salary) AS FirstSalary,
+       Salary - FIRST_VALUE(Salary) OVER (PARTITION BY Gender ORDER BY Salary) AS SalaryDifference
+FROM Employees;
+Output:
+Name	Gender	Salary	FirstSalary	SalaryDifference
+John	Male	1000	1000	0
+Mark	Male	1200	1000	200
+Steve	Male	1500	1000	500
+Sarah	Female	1300	1300	0
+Lucy	Female	1400	1300	100
+Anna	Female	1600	1300	300
+Explanation:
+Salary - FIRST_VALUE(Salary): This calculates the difference between the current row's Salary and the first salary in the partition.
+3. Alternative Approach: Using MIN Instead of FIRST_VALUE
+If you are looking for the minimum value in the partition (which, depending on the order, can be the same as the first value), you can use the MIN function in conjunction with PARTITION BY.
+
+Example with MIN
+sql
+Copy code
+SELECT Name, Gender, Salary, 
+       MIN(Salary) OVER (PARTITION BY Gender) AS MinSalary
+FROM Employees;
+Explanation:
+MIN(Salary): Returns the minimum salary within each gender partition.
+Output:
+Name	Gender	Salary	MinSalary
+John	Male	1000	1000
+Mark	Male	1200	1000
+Steve	Male	1500	1000
+Sarah	Female	1300	1300
+Lucy	Female	1400	1300
+Anna	Female	1600	1300
+This approach is useful when you want to use the minimum salary within each partition for further comparisons or calculations.
+
+Conclusion:
+FIRST_VALUE allows you to get the first value in an ordered set within each partition.
+You can use it for comparisons or calculations, such as finding the difference between the current row’s value and the first value in the partition.
+Alternatively, MIN can also be used to get the smallest value in each partition.
+Let me know if you have any more specific use cases in mind or need further clarification!
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,58 @@
+Explanation
+ROW_NUMBER(): Assigns a unique sequential integer to 
+rows within the result set, starting at 1. If there 
+are duplicate values in the ordering column(s), 
+ROW_NUMBER() will still assign a 
+unique number to each row.
+
+
+
+RANK(): Similar to ROW_NUMBER(), 
+but if there are duplicates in the 
+ordering column(s), it assigns the same rank to the
+ duplicate values. However, the next rank will be skipped.
+
+
+
+
+DENSE_RANK(): Like RANK(), it assigns
+ the same rank to duplicate values but
+ doesn't skip ranks for subsequent values.
+-- Using ROW_NUMBER()
+SELECT 
+    EmployeeID,
+    EmployeeName,
+    Department,
+    Salary,
+    ROW_NUMBER() OVER (ORDER BY Salary DESC) AS RowNumber,
+	RANK() OVER (ORDER BY Salary DESC) AS [Rank],
+	DENSE_RANK() OVER (ORDER BY Salary DESC) AS DenseRank
+FROM Employee;
+
+
+SELECT 
+    EmployeeID,
+    EmployeeName,
+    Department,
+    Salary,
+    ROW_NUMBER() OVER (ORDER BY Salary DESC) AS RowNumber
+	--RANK() OVER (ORDER BY Salary DESC) AS Rank
+	--DENSE_RANK() OVER (ORDER BY Salary DESC) AS DenseRank
+FROM Employee;
+-- Using RANK()
+SELECT 
+    EmployeeID,
+    EmployeeName,
+    Department,
+    Salary,
+    RANK() OVER (ORDER BY Salary DESC) AS Rank
+FROM Employee;
+
+-- Using DENSE_RANK()
+SELECT 
+    EmployeeID,
+    EmployeeName,
+    Department,
+    Salary,
+    DENSE_RANK() OVER (ORDER BY Salary DESC) AS DenseRank
+FROM Employee;

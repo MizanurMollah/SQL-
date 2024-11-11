@@ -1,0 +1,22 @@
+Using GROUPING and GROUPING_ID
+Now, let's use GROUPING and GROUPING_ID 
+with a GROUP BY ROLLUP to see how they work.
+
+
+-- Using GROUPING and GROUPING_ID with ROLLUP
+SELECT 
+    Department,
+    SUM(Salary) AS TotalSalary,
+    GROUPING(Department) AS IsDepartmentGrouped,
+    GROUPING_ID(Department) AS GroupingID.
+FROM Employee
+GROUP BY ROLLUP (Department);
+Explanation
+GROUP BY ROLLUP (Department):
+
+ This generates subtotals and a grand total for the Department column.
+GROUPING(Department): Returns 1 if the Department column is aggregated 
+in the result set (i.e., if it's part of a subtotal or total row), and 0 otherwise.
+GROUPING_ID(Department): Returns a unique identifier (in binary format) 
+that indicates which columns were aggregated. For a single column, 
+this will be 0 or 1, where 1 means the column is part of a subtotal or total.

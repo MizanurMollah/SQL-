@@ -1,0 +1,141 @@
+  View: 
+    A view in SQL is a virtual table that is based
+	on the result of a query. It doesn't store data itself,
+	but rather presents data from one or more tables in a specific format.
+	A view can be used to simplify complex queries, provide security 
+	(by restricting access to certain data), 
+	and present a customized view of the data.
+
+	Key Characteristics of Views:
+		Virtual Table: A view behaves like a table,
+		but it doesn't store data. Instead, 
+		it generates the result dynamically when queried.
+		
+     No Physical Storage: 
+	 The data in a view is derived from underlying base tables or other views.
+	 
+	 Simplifies Complex Queries:
+	 Views can simplify complex SQL queries by 
+	 encapsulating them and providing a simple interface to users.
+	 
+     Security:
+	 Views can restrict access to specific columns or rows of the underlying tables.
+	 
+     Read-Only or Updatable: 
+	 Some views are read-only, meaning you can’t modify the data through them.
+	 Others can be updatable, allowing changes to be made directly through
+	 the view to the underlying tables.
+	 
+	 
+			Types of Views:
+						Simple View:
+
+                             A view based on a single table.
+                             Does not contain any complex logic like joins, aggregates, or GROUP BY.
+   Typically, simple views are updatable.
+   Example:
+
+		CREATE VIEW EmployeeView AS
+		SELECT EmployeeID, FirstName, LastName, Salary
+		FROM Employee;
+		
+		
+		Complex View:
+
+		A view based on multiple tables, often involving joins, aggregations, or grouping.
+		May not be updatable.
+   
+   Example:
+
+		CREATE VIEW DepartmentSalary AS
+		SELECT e.EmployeeID, e.FirstName, e.LastName, d.DepartmentName, e.Salary
+		FROM Employee e
+		JOIN Department d ON e.DepartmentID = d.DepartmentID;
+
+
+		Materialized View:
+
+		Stores the results of the query physically on disk, unlike a regular view.
+		It can be refreshed periodically to update its data from the base tables.
+		Provides better performance for complex or frequently run queries.
+		Example (PostgreSQL):
+ 
+		CREATE MATERIALIZED VIEW EmployeeSalary AS
+		SELECT DepartmentID, AVG(Salary) AS AvgSalary
+		FROM Employee
+		GROUP BY DepartmentID;
+		Creating a View:
+		To create a view, you use the CREATE VIEW statement, followed by the view name and the SELECT query.
+			CREATE VIEW view_name AS
+			SELECT column1, column2, ...
+			FROM table_name
+			WHERE condition;
+
+			CREATE VIEW EmployeeSalary AS
+			SELECT DepartmentID, AVG(Salary) AS AvgSalary
+			FROM Employee
+			GROUP BY DepartmentID;
+SELECT * FROM EmployeeSalary;
+  Updatable Views:
+        In some cases, views can be updated, meaning changes made to  
+		the view are propagated to the underlying tables. For a view  
+		to be updatable, the following conditions usually must be met:
+
+          It must not contain complex features such as GROUP BY, DISTINCT, JOIN with multiple tables, or aggregate functions.
+		
+        Materialized View:
+            Materialized views store the result of a query physically and can be periodically 
+			refreshed to keep data up-to-date. This is useful for complex queries where performance is important.
+
+          Refreshing a Materialized View: The data can be updated using the REFRESH MATERIALIZED VIEW statement.
+
+CREATE MATERIALIZED VIEW EmployeeSummary AS
+SELECT DepartmentID, COUNT(*) AS NumberOfEmployees, AVG(Salary) AS AvgSalary
+FROM Employee
+GROUP BY DepartmentID;
+Altering or Dropping a View:
+Alter a View: You can modify an existing view using CREATE OR REPLACE VIEW, which completely replaces the existing view definition.
+
+Example:
+
+
+CREATE OR REPLACE VIEW EmployeeSalary AS
+SELECT DepartmentID, COUNT(*) AS NumberOfEmployees, AVG(Salary) AS AvgSalary
+FROM Employee
+GROUP BY DepartmentID;
+Drop a View: To delete a view, use the DROP VIEW statement.
+
+Example:
+
+DROP VIEW EmployeeSalary;
+
+Benefits of Using Views:
+
+Simplification: Complex queries can be encapsulated in views, making it easier for users to query data without dealing with complexity.
+
+Data Security: Views can expose only specific columns or rows, hiding sensitive information.
+
+Consistency: Views provide a consistent interface for accessing data, even if the underlying table structure changes.
+
+Reusability: Once created, views can be reused in multiple queries, reducing redundancy.
+
+Limitations:
+Performance: Queries against views can be slower than queries against base tables, especially if the view involves joins, subqueries, or aggregations.
+
+Non-Updatable Views: Views that contain complex logic (e.g., joins, aggregates) may not be updatable, which could limit their usefulness in some scenarios.
+
+Materialized Views: Although materialized views can improve performance, they require additional storage space, and refreshing them can be resource-intensive.
+
+
+Use Case Examples:
+		Simplifying Reports: A view can encapsulate complex SQL logic and present the result in a simple, readable form for reporting purposes.
+		Data Aggregation: Materialized views can be used to store precomputed aggregations, reducing the need to repeatedly calculate them.
+		Security: Create a view that exposes only non-sensitive information to users, such as showing employees without revealing their salaries.
+Example with Joins:
+
+CREATE VIEW EmployeeDepartment AS
+SELECT e.EmployeeID, e.FirstName, e.LastName, d.DepartmentName
+FROM Employee e
+JOIN Department d ON e.DepartmentID = d.DepartmentID;
+This view joins the Employee and Department tables and can be queried to show a list of employees with their department names.
+

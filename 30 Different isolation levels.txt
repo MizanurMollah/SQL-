@@ -1,0 +1,64 @@
+QL Server supports different isolation levels that control how transactions
+ are managed in terms of locking and concurrency. Here are the key isolation levels:
+
+1. Read Uncommitted
+Description: The lowest isolation level. Allows reading uncommitted (dirty) data.
+
+Pros: No locks are placed, which improves performance.
+
+Cons: Dirty reads can occur (you may read changes that are later rolled back).
+
+sql
+Copy code
+SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+2. Read Committed
+Description: Default level in SQL Server. Ensures that only committed data is read.
+
+Pros: No dirty reads.
+
+Cons: Non-repeatable reads can occur (data may change during a transaction).
+
+sql
+Copy code
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+3. Repeatable Read
+Description: Ensures that if a row is read twice in the same transaction, it will
+ remain unchanged. Locks are placed on all rows that are read.
+
+Pros: Prevents non-repeatable reads.
+
+Cons: May cause blocking as locks are held for the duration of the transaction.
+
+sql
+Copy code
+SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+4. Serializable
+Description: The highest isolation level. Ensures complete isolation by placing
+ range locks on the data, which prevents others from reading, inserting,
+ or updating rows in the range.
+
+Pros: Prevents dirty reads, non-repeatable reads, and phantom reads.
+
+Cons: Slow performance due to heavy locking.
+
+sql
+Copy code
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+5. Snapshot
+Description: Data is read as it was at the start of the transaction, providing a
+ version of data (read from the past) without locking.
+
+Pros: No locking, no blocking, prevents dirty and non-repeatable reads.
+
+Cons: Increased usage of tempdb to store data snapshots.
+
+sql
+Copy code
+SET TRANSACTION ISOLATION LEVEL SNAPSHOT;
+Summary of Issues Addressed by Isolation Levels:
+Dirty Reads: Reading uncommitted changes 
+(avoided by Read Committed and higher levels).
+Non-Repeatable Reads: Data changes between
+ reads in a transaction (avoided by Repeatable Read and higher).
+Phantom Reads: New rows being added or deleted by 
+other transactions during a transaction (avoided by Serializable).

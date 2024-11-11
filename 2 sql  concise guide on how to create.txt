@@ -1,0 +1,105 @@
+Here’s a concise guide on how to create a table, alter a table, insert data, and add primary and foreign keys in SQL. I'll use a simple example involving Employees and Departments tables.
+
+
+
+1. Create Database
+To create a new database, use the following SQL command:
+
+sql
+Copy code
+CREATE DATABASE CompanyDB;
+2. Use the Database
+After creating the database, you need to select it to perform further operations, such as creating tables:
+
+
+1. Create Table
+Creating the Departments Table
+sql
+Copy code
+CREATE TABLE Departments (
+    DeptID INT PRIMARY KEY,
+    DeptName VARCHAR(50) NOT NULL
+);
+Creating the Employees Table
+sql
+Copy code
+CREATE TABLE Employees (
+    EmployeeID INT PRIMARY KEY,
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    DeptID INT,
+    FOREIGN KEY (DeptID) REFERENCES Departments(DeptID)
+);
+2. Alter Table
+Adding a Column
+You can use the ALTER TABLE statement to add a new column to the existing table.
+
+sql
+Copy code
+ALTER TABLE Employees
+ADD Salary DECIMAL(10, 2);
+Adding a Foreign Key (if not added during table creation)
+If you want to add a foreign key constraint after creating the table, you can do so as follows:
+
+sql
+Copy code
+ALTER TABLE Employees
+ADD CONSTRAINT FK_Department
+FOREIGN KEY (DeptID) REFERENCES Departments(DeptID);
+3. Insert Data
+Inserting Data into Departments
+sql
+Copy code
+INSERT INTO Departments (DeptID, DeptName) VALUES 
+(1, 'Sales'),
+(2, 'IT'),
+(3, 'HR');
+Inserting Data into Employees
+sql
+Copy code
+INSERT INTO Employees (EmployeeID, FirstName, LastName, DeptID, Salary) VALUES 
+(1, 'John', 'Doe', 2, 60000.00),
+(2, 'Jane', 'Smith', 1, 55000.00),
+(3, 'Mike', 'Johnson', 3, 50000.00);
+4. Summary of SQL Commands
+Create Table: Define the structure of a new table.
+Alter Table: Modify the structure of an existing table.
+Insert: Add data to a table.
+Primary Key: Uniquely identify each row in a table.
+Foreign Key: Establish a relationship between two tables.
+Complete Example
+Putting it all together, here's a complete example:
+
+sql
+Copy code
+-- 1. Create Departments Table
+CREATE TABLE Departments (
+    DeptID INT PRIMARY KEY,
+    DeptName VARCHAR(50) NOT NULL
+);
+
+-- 2. Create Employees Table
+CREATE TABLE Employees (
+    EmployeeID INT PRIMARY KEY,
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    DeptID INT,
+    FOREIGN KEY (DeptID) REFERENCES Departments(DeptID)
+);
+
+-- 3. Alter Employees Table to Add Salary Column
+ALTER TABLE Employees
+ADD Salary DECIMAL(10, 2);
+
+-- 4. Insert Data into Departments
+INSERT INTO Departments (DeptID, DeptName) VALUES 
+(1, 'Sales'),
+(2, 'IT'),
+(3, 'HR');
+
+-- 5. Insert Data into Employees
+INSERT INTO Employees (EmployeeID, FirstName, LastName, DeptID, Salary) VALUES 
+(1, 'John', 'Doe', 2, 60000.00),
+(2, 'Jane', 'Smith', 1, 55000.00),
+(3, 'Mike', 'Johnson', 3, 50000.00);
+This example shows how to create and modify tables, insert data, and manage primary and foreign key relationships in SQL. If you need further details or specific modifications, feel free to ask!

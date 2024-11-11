@@ -1,0 +1,33 @@
+A subquery is a query nested inside another query. It is used to return data that will 
+be used in the main query as a condition to further restrict the data to be retrieved. 
+Subqueries can be placed in different parts of a SQL statement, including the SELECT
+ clause, FROM clause, and WHERE clause.
+
+Types of Subqueries:
+
+
+Single-row subquery: Returns only one row of results. It is often used in the WHERE or HAVING clauses.
+
+SELECT employee_name 
+FROM employees 
+WHERE department_id = (SELECT department_id FROM departments WHERE department_name = 'Sales');
+
+Multi-row subquery: Returns multiple rows of results. It is used with operators like IN, ANY, ALL.
+
+SELECT employee_name 
+FROM employees 
+WHERE department_id IN (SELECT department_id FROM departments WHERE location_id = 100);
+
+
+Correlated subquery: A subquery that references columns from the outer query. It is evaluated once for each row processed by the outer query.
+
+sql
+SELECT employee_name 
+FROM employees e 
+WHERE salary > (SELECT AVG(salary) FROM employees WHERE department_id = e.department_id);
+
+Nested subquery: A subquery within another subquery.
+
+SELECT employee_name 
+FROM employees 
+WHERE department_id = (SELECT department_id FROM departments WHERE manager_id = (SELECT manager_id FROM managers WHERE manager_name = 'John Doe'));

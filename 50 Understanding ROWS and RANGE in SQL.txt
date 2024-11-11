@@ -1,0 +1,121 @@
+Understanding ROWS and RANGE in SQL
+In SQL, when working with window functions, you often define a 
+window frame to determine which rows are included in your calculations. The two primary methods to define this frame are ROWS and RANGE. Here’s a detailed look at each:
+
+1. ROWS
+ROWS specifies a physical number of rows to include in the frame, 
+based purely on their positions in the result set. It does not consider the values of the rows; rather, it focuses on how many rows to look at.
+
+Syntax
+sql
+Copy code
+ROWS BETWEEN <start> AND <end>
+Example Use Cases
+Running Total Calculation
+
+sql
+Copy code
+SELECT 
+    Name, 
+    Salary,
+    SUM(Salary) OVER (
+        ORDER BY Salary 
+        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+    ) AS RunningTotal
+FROM Employees;
+Description: This query calculates the running total
+ of salaries from the beginning of the dataset to the current row.
+Average of Current and Next Two Rows
+
+sql
+Copy code
+SELECT 
+    Name, 
+    Salary,
+    AVG(Salary) OVER (
+        ORDER BY Salary 
+        ROWS BETWEEN CURRENT ROW AND 2 FOLLOWING
+    ) AS AvgNextTwoSalaries
+FROM Employees;
+Description: This computes the average salary of the 
+current row plus the next two rows.
+2. RANGE
+RANGE specifies a logical range of values to include 
+in the frame, allowing for more flexible calculations. It considers the actual values of the rows in the ordering.
+
+Syntax
+sql
+Copy code
+RANGE BETWEEN <start> AND <end>
+Example Use Cases
+Running Total with Value Consideration
+
+sql
+Copy code
+SELECT 
+    Name, 
+    Salary,
+    SUM(Salary) OVER (
+        ORDER BY Salary 
+        RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+    ) AS RunningTotal
+FROM Employees;
+Description: This query calculates a running total 
+of salaries but can include rows with the same salary value as the current row.
+Average of Current Row and Higher Salaries
+
+sql
+Copy code
+SELECT 
+    Name, 
+    Salary,
+    AVG(Salary) OVER (
+        ORDER BY Salary 
+        RANGE BETWEEN CURRENT ROW AND 100 FOLLOWING
+    ) AS AvgNextSalaryRange
+FROM Employees;
+Description: This averages the salary of the current row 
+and any subsequent rows that are within the specified range of salary (e.g., up to 100 units higher).
+Key Differences
+Feature	ROWS	RANGE
+Focus	Physical row count	Logical value range
+Behavior	Counts rows based on their position	Counts rows based on their value
+Use Case	When you need a specific number of rows	When calculations depend on row values
+Example of Both in a Query
+Here’s a combined example illustrating both ROWS and RANGE within the same query:
+
+sql
+Copy code
+SELECT 
+    Name, 
+    Salary,
+    
+    -- Running Total with ROWS
+    SUM(Salary) OVER (
+        ORDER BY Salary 
+        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+    ) AS RunningTotalRows,
+    
+    -- Running Total with RANGE
+    SUM(Salary) OVER (
+        ORDER BY Salary 
+        RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+    ) AS RunningTotalRange
+
+FROM 
+    Employees
+ORDER BY 
+    Salary;
+Conclusion
+In summary, understanding how ROWS and RANGE operate is vital 
+for leveraging SQL window functions effectively. While ROWS is 
+used for precise row counts, RANGE allows for more flexible 
+calculations based on values. Each has its use cases, making 
+them powerful tools in data analysis. If you have any further 
+questions or need additional examples, feel free to ask!
+
+
+
+
+
+

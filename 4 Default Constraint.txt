@@ -1,0 +1,21 @@
+Default Constraint:
+					A Column Default Can be specified using Default constraint.
+			The Default constraint is used to insert a default vaule into a
+			column. The default value into a column. The default value will be 
+			added to all new records, if no other value is specified, Including Null.
+
+Altering an exiting column to add a default constraint:
+  Alter table { table_name}
+  Add constraint { constraint_name}
+  Default {default_value} for { Existing_column_Name}
+  
+ Addig a new column, with default value, to an exiting table:
+ 
+  Alter table { table_name}
+  add { Column_name} {data_Type} {null | not null}
+  Constraint {constraint_name} default {default_value}
+  
+  Dropping a constraint:
+  
+  Alter table {table_name}
+  drop constraint {constraint_name}

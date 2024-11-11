@@ -1,0 +1,135 @@
+			Key Differences Between UNION and UNION ALL
+			UNION:
+			Removes duplicate rows from the combined result set.
+			Performs an implicit DISTINCT operation to eliminate duplicates.
+			Generally slower than UNION ALL due to the extra step of removing duplicates.
+			UNION ALL:
+			Combines all rows from the result sets, including duplicates.
+			Faster because it does not perform duplicate elimination.
+			Syntax
+			Both UNION and UNION ALL follow the same basic syntax:
+
+			sql
+			Copy code
+			SELECT column1, column2, ...
+			FROM table1
+			[WHERE condition]
+			UNION [ALL]
+			SELECT column1, column2, ...
+			FROM table2
+			[WHERE condition];
+			Detailed Explanation
+			1. UNION
+			Purpose: Combines results from multiple queries and removes duplicate rows from the final result set.
+			Usage Consideration: Use UNION when you need a unique list of records from both tables or queries.
+			Performance Impact: Slower due to the de-duplication step.
+			Example:
+
+			sql
+			Copy code
+			SELECT name, department FROM employees
+			UNION
+			SELECT name, department FROM managers;
+			Here, UNION will remove any rows that are duplicated in both employees and managers tables.
+
+			2. UNION ALL
+			Purpose: Combines results from multiple queries but keeps all rows, including duplicates.
+			Usage Consideration: Use UNION ALL when duplicates are acceptable or needed.
+			Performance Impact: Faster because it does not perform duplicate elimination.
+			Example:
+
+			sql
+			Copy code
+			SELECT name, department FROM employees
+			UNION ALL
+			SELECT name, department FROM managers;
+			Here, UNION ALL will keep all rows, including duplicates. If an employee and a manager share the same name and department, both rows will be included.
+
+			Example Tables and Data
+			Let’s create example tables with data to show how UNION and UNION ALL work:
+
+			sql
+			Copy code
+			CREATE TABLE employees (
+				emp_id INT,
+				name VARCHAR(50),
+				department VARCHAR(50)
+			);
+
+			CREATE TABLE managers (
+				mgr_id INT,
+				name VARCHAR(50),
+				department VARCHAR(50)
+			);
+
+			INSERT INTO employees (emp_id, name, department) VALUES
+			(1, 'Alice', 'Sales'),
+			(2, 'Bob', 'IT'),
+			(3, 'Charlie', 'Marketing');
+
+			INSERT INTO managers (mgr_id, name, department) VALUES
+			(1, 'Alice', 'Sales'),
+			(2, 'David', 'IT');
+			Example Queries and Outputs
+			Using UNION:
+
+			sql
+			Copy code
+			SELECT name, department FROM employees
+			UNION
+			SELECT name, department FROM managers;
+			Result:
+
+			markdown
+			Copy code
+			name      | department
+			-----------------------
+			Alice     | Sales
+			Bob       | IT
+			Charlie   | Marketing
+			David     | IT
+			Note: Alice appears only once even though she is present in both employees and managers.
+			Using UNION ALL:
+
+			sql
+			Copy code
+			SELECT name, department FROM employees
+			UNION ALL
+			SELECT name, department FROM managers;
+			Result:
+
+			markdown
+			Copy code
+			name      | department
+			-----------------------
+			Alice     | Sales
+			Bob       | IT
+			Charlie   | Marketing
+			Alice     | Sales
+			David     | IT
+			Note: Alice appears twice because UNION ALL includes all duplicates.
+			Comparison Table: UNION vs UNION ALL
+			Aspect	UNION	UNION ALL
+			Duplicate Handling	Removes duplicates	Keeps duplicates
+			Performance	Slower due to de-duplication	Faster without de-duplication
+			Use Case	When unique values are needed	When all records are needed
+			Typical Applications	Unique lists, reporting	Data aggregation
+			Common Use Cases
+			UNION:
+			Creating unique lists of items from multiple tables (e.g., list of unique clients and partners).
+			Used in reporting where duplicate records may skew results.
+			UNION ALL:
+			Aggregating all data, including duplicates, for analysis.
+			Combining tables where duplicates represent meaningful separate instances.
+			Performance Considerations
+			When to Use UNION:
+
+			When data integrity requires uniqueness.
+			Be cautious with UNION on large datasets, as it may slow down query performance.
+			When to Use UNION ALL:
+
+			Use UNION ALL when duplicates are acceptable or needed, as it’s more efficient and faster.
+			Recommended when working with large datasets if duplicates do not affect the final result.
+			Practical Tips
+			If you’re only concerned with duplicates in certain columns, consider using DISTINCT within a single query rather than UNION.
+			UNION queries can be rewritten using JOIN in certain cases, especially if you’re only looking for values that are distinct across the tables.

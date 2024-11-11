@@ -1,0 +1,37 @@
+Diffrent Ways to Replace Null Values.
+
+  ISNULL() Functions
+  Case Statement
+  COALESE() Functions
+  
+  
+  Null Values Replace Use ISNULL() Functions:
+  
+    Select E.name as Employee, 
+	ISNULL(M.Name, 'No Manager') as maneger
+	from tblEmployee E 
+	Left Join tblEmployee M
+	ON E.EmployeeID = M.EmployeeID
+	
+	
+	Null Values Replace Use Case when:
+	
+	
+	Select E.Name as Employee,
+	Case 
+	   when M.Name Is Null Then 'No Manager' 
+	   Else M.Name 
+	End as Manager
+	from tblEmployee E 
+	Left Join tblEmployee M
+	ON E.EmployeeID = M.EmployeeID
+	
+	
+	Null Values Replace Use COALESE() Functions:
+	
+	
+	Select E.Name as Employee,
+	Coalesce(m.name, 'No Manager') as Manager 
+	from TblEmployee E
+	Left Join TblEmployee M
+	On E.EmployeeID = M. EmployeeID

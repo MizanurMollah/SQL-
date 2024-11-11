@@ -1,0 +1,103 @@
+In SQL, the ROWS and RANGE functions are part of the windowing concept. 
+They define the boundaries of a window frame when used with window 
+functions such as ROW_NUMBER(), LEAD(), LAG(), SUM(), AVG(), etc. 
+These clauses allow more control over how rows are included in the window frame for each row being processed.
+
+Key Differences Between ROWS and RANGE
+ROWS: Defines the window frame in terms of the physical number of rows,
+ meaning the actual number of rows relative to the current row.
+RANGE: Defines the window frame in terms of logical ranges, such as all
+ rows with the same value in the ORDER BY clause or based on a range of values relative to the current row.
+1. ROWS Function
+The ROWS function is used to specify the exact number of rows before and 
+after the current row in a window. It works with the physical row count,
+ so it's based on the actual position of the rows.
+
+Syntax for ROWS:
+sql
+Copy code
+<window_function> OVER (ORDER BY column_name ROWS <frame_clause>)
+Frame clauses for ROWS:
+ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW: Includes all rows from the start of the partition up to the current row.
+ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING: Includes all rows from the current row to the end of the partition.
+ROWS BETWEEN N PRECEDING AND N FOLLOWING: Includes a fixed number of rows before and after the current row.
+Example: Cumulative Sum Using ROWS
+sql
+Copy code
+SELECT Name, Gender, Salary, 
+       SUM(Salary) OVER (ORDER BY Salary ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS CumulativeSum
+FROM Employees;
+Explanation:
+ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW: For each row, the window frame includes
+ all rows from the start of the dataset to the current row. This is useful for calculating a running total (cumulative sum).
+Output:
+Name	Gender	Salary	CumulativeSum
+John	Male	1000	1000
+Mark	Male	1200	2200
+Steve	Male	1500	3700
+Sarah	Female	1300	5000
+Lucy	Female	1400	6400
+Anna	Female	1600	8000
+2. RANGE Function
+The RANGE function operates on a logical range of values, such as all rows with the same
+ Salary (if the ORDER BY clause is based on Salary). It takes into account the values in 
+ the ORDER BY clause and considers the logical grouping rather than the physical number of rows.
+
+Syntax for RANGE:
+sql
+Copy code
+<window_function> OVER (ORDER BY column_name RANGE <frame_clause>)
+Frame clauses for RANGE:
+RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW: Includes all rows with values less 
+than or equal to the value of the current row.
+RANGE BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING: Includes all rows with values 
+greater than or equal to the value of the current row.
+RANGE BETWEEN N PRECEDING AND N FOLLOWING: Includes a
+ range of values before and after the current row.
+Example: Cumulative Sum Using RANGE
+sql
+Copy code
+SELECT Name, Gender, Salary, 
+       SUM(Salary) OVER (ORDER BY Salary RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS CumulativeSum
+FROM Employees;
+Explanation:
+RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW: For each row, 
+this includes all rows with values less than or equal to the current row's Salary.
+ It operates over the logical range, meaning rows with the same value are treated together.
+Output:
+Name	Gender	Salary	CumulativeSum
+John	Male	1000	1000
+Mark	Male	1200	2200
+Steve	Male	1500	3700
+Sarah	Female	1300	5000
+Lucy	Female	1400	6400
+Anna	Female	1600	8000
+3. Comparison Between ROWS and RANGE
+Feature	ROWS	RANGE
+Operates On	Physical rows	Logical ranges of values
+Inclusion Criteria	Fixed number of rows before/after the current row	
+Rows with the same value or within a range of values
+Usage	Cumulative sums, moving averages based on fixed row numbers	
+Handling ranges of values, such as dates or continuous data
+Performance	Generally faster as it deals with row numbers	Slightly 
+slower since it groups logical ranges
+Example with Both ROWS and RANGE:
+sql
+Copy code
+SELECT Name, Gender, Salary, 
+       SUM(Salary) OVER (ORDER BY Salary ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING) AS RowSum,
+       SUM(Salary) OVER (ORDER BY Salary RANGE BETWEEN 100 PRECEDING AND 100 FOLLOWING) AS RangeSum
+FROM Employees;
+Explanation:
+ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING: This sums the salary of the 
+current row, one row before, and one row after.
+RANGE BETWEEN 100 PRECEDING AND 100 FOLLOWING: This sums the salaries 
+for rows with values within a 100-unit range of the current row's salary.
+Summary:
+ROWS: Operates on physical rows and is suitable for moving windows with a fixed number of rows.
+RANGE: Operates on logical ranges of values and is useful for comparing or aggregating data based
+ on ranges of values like dates, numeric ranges, or any continuous data.
+Both clauses allow you to define how much of the dataset is included in the window for each row
+ and are crucial for advanced data analytics in SQL.
+
+Let me know if you'd like more examples or further clarification!

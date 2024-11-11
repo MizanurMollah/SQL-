@@ -1,0 +1,140 @@
+select * from Employee
+select * from Department
+
+select * from Employee a
+inner Join Department b
+On a.EmployeeID= b.ID
+
+create function Fn_employeeValueFunctionwithid (@DepartmentID int)
+Returns table
+as
+Return
+select * from Employee where DepartmentID = @DepartmentID
+
+select * from Fn_employeeValueFunctionwithid (1)
+
+select * from Department b
+cross apply Fn_employeeValueFunctionwithid(b.id) a
+--On a.EmployeeID= b.ID
+select * from Department b
+outer apply Fn_employeeValueFunctionwithid(b.id) a
+--On a.EmployeeID= b.ID
+
+
+
+
+o illustrate CROSS APPLY and OUTER APPLY in SQL Server, let's create two tables, Department and Employee, with 10 sample data entries. We’ll use these tables to demonstrate the functionality of the APPLY operators.
+
+Table Definitions and Data
+Department Table
+
+sql
+Copy code
+CREATE TABLE Department (
+    DepartmentID INT,
+    DepartmentName VARCHAR(50)
+);
+
+INSERT INTO Department (DepartmentID, DepartmentName) VALUES
+(1, 'IT'),
+(2, 'HR'),
+(3, 'Payroll'),
+(4, 'Administration'),
+(5, 'Sales');
+Employee Table
+
+sql
+Copy code
+CREATE TABLE Employee (
+    EmployeeID INT,
+    Name VARCHAR(50),
+    Gender VARCHAR(10),
+    Salary DECIMAL(10, 2),
+    DepartmentID INT
+);
+
+INSERT INTO Employee (EmployeeID, Name, Gender, Salary, DepartmentID) VALUES
+(1, 'Mark', 'Male', 50000, 1),
+(2, 'Sara', 'Female', 39000, 2),
+(3, 'Mary', 'Female', 60000, 3),
+(4, 'John', 'Male', 56000, 1),
+(5, 'Steve', 'Male', 45000, 2),
+(6, 'Alice', 'Female', 47000, 3),
+(7, 'Bob', 'Male', 52000, 4),
+(8, 'Nina', 'Female', 49000, 5),
+(9, 'Tom', 'Male', 53000, 1),
+(10, 'Lily', 'Female', 55000, 3);
+Table-Valued Function
+Create a table-valued function that returns employees based on a department ID.
+
+sql
+Copy code
+CREATE FUNCTION GetEmployeesByDepartment (@DeptID INT)
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT Name, Gender, Salary
+    FROM Employee
+    WHERE DepartmentID = @DeptID
+);
+Using CROSS APPLY
+The CROSS APPLY operator returns rows from the left table (Department) for which the table-valued function returns matching rows.
+
+sql
+Copy code
+SELECT 
+    d.DepartmentName,
+    e.Name,
+    e.Gender,
+    e.Salary
+FROM 
+    Department d
+CROSS APPLY 
+    GetEmployeesByDepartment(d.DepartmentID) e;
+Using OUTER APPLY
+The OUTER APPLY operator returns rows from the left table (Department) and all matching rows from the table-valued function. If there are no matches, NULLs are returned for columns from the table-valued function.
+
+sql
+Copy code
+SELECT 
+    d.DepartmentName,
+    e.Name,
+    e.Gender,
+    e.Salary
+FROM 
+    Department d
+OUTER APPLY 
+    GetEmployeesByDepartment(d.DepartmentID) e;
+Sample Results
+CROSS APPLY Result:
+
+css
+Copy code
+DepartmentName | Name  | Gender | Salary
+IT             | Mark  | Male   | 50000
+IT             | John  | Male   | 56000
+IT             | Tom   | Male   | 53000
+HR             | Sara  | Female | 39000
+HR             | Steve | Male   | 45000
+Payroll        | Mary  | Female | 60000
+Payroll        | Alice | Female | 47000
+Administration | Bob   | Male   | 52000
+Sales          | Nina  | Female | 49000
+OUTER APPLY Result:
+
+arduino
+Copy code
+DepartmentName | Name  | Gender | Salary
+IT             | Mark  | Male   | 50000
+IT             | John  | Male   | 56000
+IT             | Tom   | Male   | 53000
+HR             | Sara  | Female | 39000
+HR             | Steve | Male   | 45000
+Payroll        | Mary  | Female | 60000
+Payroll        | Alice | Female | 47000
+Administration | Bob   | Male   | 52000
+Sales          | Nina  | Female | 49000
+Administration | NULL  | NULL   | NULL
+Sales          | NULL  | NULL   | NULL
+This setup and these queries should give you a clear view of how CROSS APPLY and OUTER APPLY work with table-valued functions in SQL Server.

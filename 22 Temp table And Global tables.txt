@@ -1,0 +1,10 @@
+Diffrence Between Local And Global temporary tables:
+  1. Local Temp Tables are prefix with single pound (#) symbal, Where as global temp
+  Tables are Prefix with 2 Pound(##) Symbols.
+  2. SQL server appends some random numbers at the end of the local temp table name,
+  where this is not done for global temp table names.
+  3. Local Temporary tables are only visible to that session of the SQL Servar which
+  has craeted it. where as the Global tempurary tables are visible to all the SQL servar session.
+  4. Local temporary Tables are automatically dropped, when the session that craeted the temporary 
+  tables is closed, where as Global temporary tables are distroyed when the last connection that 
+  referencing the global temp table is closed.

@@ -1,0 +1,59 @@
+Index View Or Matrialized  view.
+
+    When craete on index On a view then call Index view.
+	
+	
+	What is an index view?
+	 or
+	 what happens when you craete an Index on a view.
+	     A standard or Non-Indexed view, just a stored SQL query. When, We try to
+		 retrive data from the view, the data is acutually retrived from the underlying
+		 base tables.
+		 
+		 So, a View is just a vartual table it dose not store any data, by default.
+		 
+		 However, when you craete an index, on a view, the view gets materialized.
+		 this means, the view is now, capable of storing data.
+		 
+		 In SQL servar, we call them index view and in oracel, Matrialized view.
+		 
+		 Note:
+		 1. The View Should be craeted with SchemaBinding Option.
+		 2. If an Aggregate Function in SELECT List, References an
+		     expression, and if there is a Possibility for that expression to 
+			 Became NULL, Then, a replacement Value should be specified.
+		 3. If Group By is specified, the select list contain COUNd_BIG(*) expression
+		 4. The Base tables in the view, should be refenced with 2 part time.
+		 
+		 Syntax: 
+		      Create Unique Clusted Index UIX_vWTotalSalesByProduct_Name
+			  On vWTotalSalesByProduct(Name).
+		
+		
+		Create View VW_SaleByTheProduct
+		with Schemabinding 
+		as
+		Select ProductName, Sum(isnull((UnitPrice*QuantitySold), 0)) AS TotalSales,
+		count_big(*) as TotalTransations from dbo.Sales  a
+		Join dbo.tblProductSales b
+		On a.SalesID= b.ProductId
+		group by ProductName
+
+
+		Select * from VW_SaleByTheProduct
+
+		Create Unique Clustered Index UIX_VW_SaleByTheProduct
+		On VW_SaleByTheProduct(ProductName)
+		
+		
+		VIEW LIMITATION
+		1. Cannot pass parameter to a view.
+		Table value function are an excellernt replacement
+		for parameterized views.
+		
+		2. Rules and Defaults cannot be associated with Views.
+		
+		3. The Order By clause is invalid in views unless TOP or FOR XML is also specified.
+		
+		4. View Cannot be based on temporary tables.
+		

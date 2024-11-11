@@ -1,0 +1,27 @@
+Option when Setting up Cascading refential integrity Constraint:
+
+1. No Action: 
+       This is the default behaviour. No Action that if an attempt is
+	   made to delete or update a row a key referenced byforegin keys
+	   in existing keys in existing rows in other table, an error is 
+	   raise and the delete or update is rollback.
+	   
+	   
+2. Cascade : 
+			Specifiecs that if an attempt is made to delete is made to delete
+            or update a row with a key referenced by foreign keys in existing rows
+			in other tables, all rows containing those foreign keys are also delete
+			or updated.
+			
+3. Set Null: 
+			Specifiecs that if an attempt is made to delete or update a row with a key
+			referenced by foreign keys in existing rows in tables, all rows containing those
+			foreign keys are set to Null.
+			
+4. Set Default: 
+				Specifiecs that if an attempt is made to delete or update a row
+				with a key referenced by foreign keys in existing rows in other,
+				all rows containing those foreign keys are set to default values.
+
+  
+	   

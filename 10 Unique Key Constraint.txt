@@ -1,0 +1,14 @@
+Unique Key Constraint:
+
+   Use Unique constraint to enforce uniqueness of a column i.e the column
+   shouldn't allow any duplicate valuse. we can add a unique thur the designer
+   or using a query,
+   
+   To create the unique key a query:
+    Alter table table_name
+	add constraint constraint_ name Uniqu(column_name)
+	
+	Unique Key:
+	
+	1. A table can have only one primary key, But more then one unique key.
+	2. Primary key does not allow nulls, where as unique key allow one nulls.

@@ -1,0 +1,131 @@
+Basic SQL Questions
+What is SQL?
+What are the different types of SQL statements?
+Explain the differences between DELETE, TRUNCATE, and DROP commands.
+What is a primary key, foreign key, unique key, and composite key?
+What is the difference between CHAR and VARCHAR data types?
+How do you create and use a JOIN? Explain the different types of joins (INNER JOIN, LEFT JOIN, RIGHT JOIN, FULL OUTER JOIN).
+What is the difference between WHERE and HAVING clauses?
+How do you use the GROUP BY and ORDER BY clauses?
+Explain UNION and UNION ALL.
+What is a subquery? What are correlated and non-correlated subqueries?
+Explain aggregate functions in SQL (SUM(), AVG(), COUNT(), MAX(), MIN()).
+How do you create and execute a stored procedure?
+Advanced SQL Server Questions
+What is a CTE (Common Table Expression), and how do you use it?
+What is the difference between ROW_NUMBER(), RANK(), and DENSE_RANK()?
+Explain the CROSS APPLY and OUTER APPLY operators.
+How do you use window functions in SQL Server?
+What are views in SQL? Can a view be updated?
+What are the differences between a table and a temporary table?
+Explain the concept of TRIGGERS in SQL Server.
+What is a recursive CTE, and when would you use it?
+How do you handle errors in SQL Server using TRY...CATCH?
+Explain transactions and ACID properties in SQL Server.
+How do you implement dynamic SQL, and what is sp_executesql?
+Advanced SQL Queries
+How do you get the Nth highest salary without using TOP or LIMIT?
+Write a query to find all employees whose salary is higher than the average salary in the company.
+How do you delete duplicate rows from a table without using the ROW_NUMBER() function?
+Write a SQL query to retrieve employees who have the same salary.
+How do you select all rows where a specific column has at least one duplicate value?
+Write a query to list departments along with the number of employees in each department, including departments that have no employees.
+How would you find all records from the last 30 days using GETDATE()?
+How would you select the first 3 characters of a string in a column?
+How do you concatenate strings in SQL Server?
+Write a query to find the second-highest salary without using subqueries.
+What is a PIVOT table in SQL Server? How do you create one?
+How do you split a comma-separated string into rows in SQL Server?
+Write a query to display employees with more than one manager.
+How do you calculate running totals or cumulative sums in SQL Server?
+How would you transpose rows to columns in SQL Server?
+Stored Procedures, Functions, and Triggers
+How do you handle dynamic queries in stored procedures?
+How do you debug a stored procedure?
+What are inline table-valued functions, and how are they different from multi-statement table-valued functions?
+How do you pass a table-valued parameter to a stored procedure?
+Write a stored procedure to update an employee’s salary based on specific conditions.
+How do you call a stored procedure inside another stored procedure?
+How do you implement a trigger to prevent data changes based on certain conditions?
+What are recursive triggers? How can you enable or disable them?
+How would you implement logging of all changes made to a table using a trigger?
+How can you optimize a stored procedure that takes too long to execute?
+Transactions and Error Handling
+How do you manage nested transactions in SQL Server?
+What happens when a transaction fails in SQL Server? How do you handle it?
+Explain savepoints in SQL Server and how they are used in transactions.
+Write a transaction that handles an error when trying to insert data into a table that violates a unique constraint.
+How can you check the status of a transaction in SQL Server?
+How do you prevent a deadlock from occurring in your SQL Server transactions?
+What are distributed transactions in SQL Server? How do you implement them?
+How can you retry a failed transaction in SQL Server?
+Performance Tuning and Optimization
+How do you troubleshoot a slow-running query in SQL Server?
+How do you find the most expensive queries in terms of resource usage?
+What are query execution plans? How do you read them in SQL Server?
+How do you use the DBCC commands for performance tuning?
+How do you handle query parameter sniffing in SQL Server?
+What are the benefits of using a filtered index?
+How do you rebuild or reorganize an index in SQL Server?
+How would you reduce the time required to execute a query that involves multiple JOIN operations?
+How do you monitor SQL Server performance metrics?
+What are the pros and cons of using indexed views?
+Indexing and Partitions
+What are included columns in an index, and when would you use them?
+How do you create a covering index?
+What is the difference between a hash index and a B-tree index?
+What is partitioning in SQL Server, and how does it help with performance?
+How do you implement table partitioning in SQL Server?
+Explain the difference between horizontal and vertical partitioning.
+How do you handle a scenario where your indexes are too large to fit in memory?
+When should you use a non-clustered index vs. a clustered index?
+Concurrency and Locking
+What are the different types of locks in SQL Server (e.g., shared, exclusive, update)?
+How does SQL Server implement locking? How can you view the locks currently held in a database?
+What is the difference between lock escalation and deadlock?
+What is a blocking session in SQL Server, and how can you resolve it?
+How would you force a lock timeout in SQL Server?
+How can you minimize locking and blocking issues in SQL Server?
+What is the READPAST hint, and when would you use it?
+How do you monitor and troubleshoot deadlocks in SQL Server?
+What is row versioning, and how does it help with concurrency control?
+Backup and Recovery
+What is a transaction log backup, and how does it differ from a full backup?
+How do you perform a point-in-time recovery in SQL Server?
+Explain the differences between simple, bulk-logged, and full recovery models.
+How do you set up log shipping in SQL Server?
+What is database mirroring, and how does it help with disaster recovery?
+How do you restore a database backup without overwriting an existing database?
+How do you perform a partial backup of a SQL Server database?
+What are the common causes of corruption in SQL Server databases, and how do you recover from it?
+How do you configure Always On Availability Groups in SQL Server?
+Database Design and Normalization
+What is a star schema, and how does it differ from a snowflake schema?
+Explain 4th normal form (4NF) and when it’s necessary to implement it.
+How do you design a database for high concurrency and scalability?
+How do you implement a many-to-many relationship in SQL Server?
+What are surrogate keys and natural keys? When would you use each?
+What are materialized views, and how do they differ from standard views?
+What is a data warehouse, and how is it different from an OLTP database?
+Data Import/Export and Integration
+How do you bulk import data from a CSV file into SQL Server?
+How do you handle schema differences during data import/export between databases?
+How do you export a large table to a flat file in SQL Server?
+What are the different tools for data integration (e.g., SSIS)?
+How do you schedule a SQL Server job to run a data import or export process?
+Security and Encryption
+How do you encrypt sensitive data in SQL Server?
+What is row-level security in SQL Server, and how do you implement it?
+How do you create a SQL Server login with minimal permissions?
+Explain the difference between symmetric and asymmetric encryption in SQL Server.
+What is Transparent Data Encryption (TDE)?
+How do you audit user activities in SQL Server?
+How do you prevent SQL injection in SQL Server?
+SQL Server Reporting and Analysis Services
+What is SQL Server Reporting Services (SSRS), and how do you create a report?
+How do you connect SSRS to a SQL Server data source?
+What are the different types of reports (e.g., tabular, matrix, drilldown)?
+How do you create a calculated measure in SQL Server Analysis Services (SSAS)?
+What is a cube in SSAS, and how does it help with data analysis?
+How do you handle performance tuning in SSRS reports?
+How do you implement data security in SSRS reports?

@@ -1,0 +1,206 @@
+Select Count(*)  As TblProducts_Row_count from tblProducts 
+select Count (*) as TblProductSales_Row_count from tblProductSales 
+
+select * from tblProducts
+select * from tblProductSales
+
+CHECKPOINT;
+GO
+DBCC DROPCLEANBUFFERS; -- Corrected: Clears the data cache
+GO
+DBCC FREEPROCCACHE; -- Corrected: Clears the execution plan cache
+
+
+-- Subquerys- To check.
+
+Select id, [Name], [Description] from tblProducts where Id  in ( select ProductId from tblProductSales)
+
+
+select a.id, [Name], [Description] from tblProducts a 
+inner join tblProductSales b
+On a.Id = b.ProductId where a.Id in ( select ProductId from tblProductSales)
+
+SELECT Id, Name, Description
+FROM tblProducts
+WHERE Id IN (SELECT ProductId FROM tblProductSales);
+
+
+SELECT DISTINCT tblProducts.Id, Name, Description
+FROM tblProducts
+INNER JOIN tblProductSales
+ON tblProducts.Id = tblProductSales.ProductId;
+
+SELECT Id, Name, Description
+FROM tblProducts
+WHERE NOT EXISTS (SELECT 1 FROM tblProductSales WHERE tblProductSales.ProductId = tblProducts.Id);
+SELECT tblProducts.Id, Name, Description
+FROM tblProducts
+LEFT JOIN tblProductSales
+ON tblProducts.Id = tblProductSales.ProductId
+WHERE tblProductSales.ProductId IS NULL;
+
+SELECT tblProducts.Id, Name, Description
+FROM tblProducts
+LEFT JOIN tblProductSales
+ON tblProducts.Id = tblProductSales.ProductId
+WHERE tblProductSales.ProductId IS NULL;
+
+SELECT tblProducts.Id, Name, Description
+FROM tblProducts
+INNER JOIN tblProductSales
+ON tblProducts.Id = tblProductSales.ProductId;
+
+
+--Here are some common strategies:
+
+--1. Indexing
+--Indexes can significantly improve query performance, especially on large tables.
+
+--Primary Key Index: Ensure both tblProducts and tblProductSales have primary keys with an index.
+
+--sql
+--Copy code
+CREATE CLUSTERED INDEX idx_tblProducts_Id ON tblProducts(Id);
+CREATE CLUSTERED INDEX idx_tblProductSales_Id ON tblProductSales(Id);
+--Foreign Key Index: Add an index on the ProductId column in tblProductSales to improve the performance of join queries.
+
+--sql
+--Copy code
+CREATE NONCLUSTERED INDEX idx_ProductId ON tblProductSales(ProductId);
+--Composite Index: If you frequently query multiple columns together (e.g., Id, Name, Description), a composite index might help.
+
+--sql
+--Copy code
+CREATE NONCLUSTERED INDEX idx_Products_Composite ON tblProducts(Id, Name, Description);
+--2. Query Optimization
+--Optimize the query itself to reduce execution time:
+
+--Avoid Subqueries: Instead of using an IN clause, which can be slower, use a JOIN for better performance.
+
+--sql
+
+SELECT 
+    p.Id, 
+    p.[Name], 
+    p.[Description], 
+    COUNT(ps.ProductId) AS SalesCount
+FROM tblProducts p
+LEFT JOIN tblProductSales ps ON p.Id = ps.ProductId
+GROUP BY p.Id, p.[Name], p.[Description];
+
+
+--Joins are typically more efficient than subqueries.
+
+--Avoid SELECT *: Always specify the columns you need. This reduces the amount of data transferred and improves performance.
+
+--Filter Early: If you have specific filtering conditions, apply them as early as possible in the query to reduce the dataset.
+
+--sql
+--Copy code
+
+
+SELECT 
+    p.Id, 
+    p.[Name], 
+    p.[Description], 
+    COUNT(ps.ProductId) AS SalesCount
+FROM tblProducts p
+LEFT JOIN tblProductSales ps ON p.Id = ps.ProductId
+WHERE ps.UnitPrice > 1000 -- Example filter
+GROUP BY p.Id, p.[Name], p.[Description];
+
+
+
+--3. Use Query Execution Plan
+--Analyze the query execution plan in SQL Server Management Studio (SSMS) to identify bottlenecks.
+
+--Execution Plan: Right-click on the query in SSMS and select "Display Estimated Execution Plan." 
+Look for any costly operations like table scans, and adjust your indexes accordingly.
+--4. Partitioning (If Tables Are Very Large)
+--If your tables are very large, you can consider partitioning them to improve query performance.
+
+--Partitioning by Date or Category: You can partition tblProductSales by date (e.g., by month or year) 
+if there are many records. This makes it easier for SQL Server to fetch relevant data faster.
+
+
+--sql
+--Copy code
+
+
+CREATE PARTITION FUNCTION myDateRangePartitionFunction (DATETIME)
+AS RANGE LEFT FOR VALUES ('2022-12-31', '2023-12-31');
+
+
+--5. Use Proper Data Types
+--Ensure you're using appropriate data types for your columns.
+
+--For example, if UnitPrice only stores positive integers, change it from INT to SMALLINT or DECIMAL
+ if fractional values are used. This can reduce storage space and improve query performance.
+--6. Statistics Update
+--Ensure SQL Server has up-to-date statistics for your tables.
+
+--Update Statistics: SQL Server uses statistics to determine the most efficient query execution plan.
+
+--sql
+--Copy code
+
+
+UPDATE STATISTICS tblProducts;
+UPDATE STATISTICS tblProductSales;
+
+
+--7. SQL Server Caching
+--SQL Server caches query execution plans and frequently accessed data. To fully take advantage of this
+, try not to frequently restart the server or clear the cache unnecessarily.
+
+--Query Plan Caching: SQL Server caches the execution plans of queries. Over time, the query engine
+ can choose more optimal plans for commonly executed queries.
+--8. Avoid Using Functions in WHERE Clause
+--Avoid using functions on columns in the WHERE clause as it can lead to poor performance and prevent
+ SQL Server from using indexes efficiently.
+
+--For example, instead of this:
+
+--sql
+--Copy code
+--SELECT * FROM tblProducts WHERE LOWER([Name]) = 'productname';
+--Rewrite the query to:
+
+--sql
+--Copy code
+
+
+SELECT * FROM tblProducts WHERE [Name] = 'ProductName';
+
+
+--9. Batch Inserts/Updates
+--If you perform bulk inserts or updates in tblProductSales,
+ use batch processing instead of individual row inserts.
+
+--Batch Insert Example:
+
+--sql
+--Copy code
+
+
+INSERT INTO tblProductSales (ProductId, UnitPrice, QuantitySold)
+SELECT ProductId, UnitPrice, QuantitySold
+FROM TempSalesData;
+
+
+--This reduces transaction overhead and improves overall performance.
+
+--10. Database Maintenance
+--Regularly perform database maintenance tasks like 
+rebuilding indexes and updating statistics.
+
+
+--Rebuild Indexes:
+
+
+
+ALTER INDEX ALL ON tblProducts REBUILD;
+ALTER INDEX ALL ON tblProductSales REBUILD;
+
+--This helps SQL Server optimize its access 
+paths and improve query performance.

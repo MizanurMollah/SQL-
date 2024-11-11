@@ -1,0 +1,270 @@
+-- ====================================================
+-- Step 1: Create the `Employees` Table
+-- ====================================================
+IF EXISTS (SELECT * FROM sys.tables WHERE name = 'Employees' AND type = 'U')
+BEGIN
+    PRINT 'Table Employees exists.';
+END
+ELSE
+BEGIN
+    PRINT 'Table Employees does not exist.';
+END
+--==================================================
+
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Employees')
+BEGIN
+    PRINT 'Table Employees exists.';
+END
+ELSE
+BEGIN
+    PRINT 'Table Employees does not exist.';
+END
+--===========================================================
+
+
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'dbo.Employees') AND type = 'U')
+BEGIN
+    PRINT 'Table Employees exists.';
+END
+ELSE
+BEGIN
+    PRINT 'Table Employees does not exist.';
+END
+----=========================================================
+
+IF OBJECT_ID('dbo.Employees', 'U') IS NOT NULL
+BEGIN
+    PRINT 'Table Employees exists.';
+END
+ELSE
+BEGIN
+    PRINT 'Table Employees does not exist.';
+END
+----===============================================
+
+BEGIN TRY
+    -- Try selecting from the table
+    SELECT TOP 1 * FROM dbo.Employees;
+    PRINT 'Table Employees exists.';
+END TRY
+BEGIN CATCH
+    -- Catch any error if the table does not exist
+    PRINT 'Table Employees does not exist.';
+END CATCH
+--============================================================
+
+IF EXISTS (
+    SELECT * 
+    FROM sys.tables t
+    JOIN sys.schemas s ON t.schema_id = s.schema_id
+    WHERE t.name = 'Employees' AND s.name = 'dbo'
+)
+BEGIN
+    PRINT 'Table Employees exists in schema dbo.';
+END
+ELSE
+BEGIN
+    PRINT 'Table Employees does not exist in schema dbo.';
+END
+---===============================================================
+-- ====================================================
+-- Step 1: Check if the `Employees` Table Exists and Drop it if it Does
+-- ====================================================
+IF EXISTS (
+    SELECT * 
+    FROM sys.tables 
+    WHERE name = 'Employees' AND type = 'U'
+) OR EXISTS (
+    SELECT * 
+    FROM INFORMATION_SCHEMA.TABLES 
+    WHERE TABLE_NAME = 'Employees'
+)
+BEGIN
+    DROP TABLE dbo.Employees;
+    PRINT 'Table Employees dropped.';
+END
+ELSE
+BEGIN
+    PRINT 'Table Employees does not exist.';
+END
+--===============================================================
+
+/*Summary of Methods
+sys.tables: Provides information on user-defined tables.
+INFORMATION_SCHEMA.TABLES: A more standard way compatible across various SQL databases.
+sys.objects: General-purpose method for checking all object types.
+OBJECT_ID: Direct function call to check if the table exists.
+TRY...CATCH: Error handling approach for operations that may fail if the table does not exist.
+sys.tables and sys.schemas: For checking tables in specific schemas.
+These methods offer flexibility and can be used depending on the specific require*/
+
+CREATE TABLE Employees
+(
+    Id INT PRIMARY KEY,          -- Unique identifier for each employee
+    Name NVARCHAR(50),           -- Employee's name
+    Gender NVARCHAR(10),         -- Employee's gender (Male/Female)
+    Salary INT,                  -- Employee's salary
+    Country NVARCHAR(50)         -- Employee's country
+);
+
+-- ====================================================
+-- Step 2: Insert Sample Data
+-- ====================================================
+INSERT INTO Employees (Id, Name, Gender, Salary, Country) VALUES
+(1, 'Mark', 'Male', 5000, 'USA'),
+(2, 'John', 'Male', 4500, 'India'),
+(3, 'Pam', 'Female', 5500, 'USA'),
+(4, 'Sara', 'Female', 4000, 'India'),
+(5, 'Todd', 'Male', 3500, 'India'),
+(6, 'Mary', 'Female', 5000, 'UK'),
+(7, 'Ben', 'Male', 6500, 'UK'),
+(8, 'Elizabeth', 'Female', 7000, 'USA'),
+(9, 'Tom', 'Male', 5500, 'UK'),
+(10, 'Ron', 'Male', 5000, 'USA');
+
+-- ====================================================
+-- Step 3: Calculate Salary Totals Using GROUPING SETS
+-- ====================================================
+SELECT 
+    Country, 
+    Gender, 
+    SUM(Salary) AS TotalSalary
+FROM 
+    Employees
+GROUP BY 
+    GROUPING SETS (
+        (Country, Gender),   -- Aggregation by Country and Gender
+        (Country),           -- Aggregation by Country
+        (Gender),            -- Aggregation by Gender
+        ()                   -- Grand Total
+    )
+ORDER BY 
+    Country, 
+    Gender;
+-- ====================================================
+-- Calculate Total Salary Using UNION ALL for Different Aggregations
+-- ====================================================
+
+-- Total salary by Country and Gender
+SELECT 
+    Country, 
+    Gender, 
+    SUM(Salary) AS TotalSalary
+FROM 
+    Employees
+GROUP BY 
+    Country, 
+    Gender
+
+UNION ALL
+
+-- Total salary by Country
+SELECT 
+    Country, 
+    NULL AS Gender, 
+    SUM(Salary) AS TotalSalary
+FROM 
+    Employees
+GROUP BY 
+    Country
+
+UNION ALL
+
+-- Total salary by Gender
+SELECT 
+    NULL AS Country, 
+    Gender, 
+    SUM(Salary) AS TotalSalary
+FROM 
+    Employees
+GROUP BY 
+    Gender
+
+UNION ALL
+
+-- Grand Total
+SELECT 
+    NULL AS Country, 
+    NULL AS Gender, 
+    SUM(Salary) AS TotalSalary
+FROM 
+    Employees;
+
+-- ====================================================
+-- End of Query
+-- ====================================================
+-- ====================================================
+-- Calculate Total Salary Using UNION ALL for Different Aggregations
+-- ====================================================
+
+-- Total salary by Country and Gender
+SELECT 
+    Country, 
+    Gender, 
+    SUM(Salary) AS TotalSalary
+FROM 
+    Employees
+GROUP BY 
+    Country, 
+    Gender
+
+UNION ALL
+
+-- Total salary by Country
+SELECT 
+    Country, 
+    NULL AS Gender, 
+    SUM(Salary) AS TotalSalary
+FROM 
+    Employees
+GROUP BY 
+    Country
+
+UNION ALL
+
+-- Total salary by Gender
+SELECT 
+    NULL AS Country, 
+    Gender, 
+    SUM(Salary) AS TotalSalary
+FROM 
+    Employees
+GROUP BY 
+    Gender
+
+UNION ALL
+
+-- Grand Total
+SELECT 
+    'Total' AS Country, 
+    'All' AS Gender, 
+    SUM(Salary) AS TotalSalary
+FROM 
+    Employees;
+
+-- ====================================================
+-- End of Query
+-- ====================================================
+
+To Over it. 
+-- ====================================================
+-- Calculate Total Salary Using GROUPING SETS
+-- ====================================================
+
+SELECT 
+    Country, 
+    Gender, 
+    SUM(Salary) AS TotalSalary
+FROM 
+    Employees
+GROUP BY 
+    GROUPING SETS (
+        (Country, Gender),   -- Total salary by Country and Gender
+        (Country),           -- Total salary by Country
+        (Gender),            -- Total salary by Gender
+        ()                   -- Grand Total
+    )
+ORDER BY 
+    Country, 
+    Gender;
+

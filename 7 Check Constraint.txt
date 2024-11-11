@@ -1,0 +1,19 @@
+Check Constraint:
+
+Check Constraint is use to limit the range of the values, that can be entered for a column.
+Syntex:
+      Alter Table { table_name}
+	  Add constraint { constraint_name} Check ( Boolean_expression)
+	  
+	If the Boolean_expression returnd true, then the CHECK constraint allows the value,
+	otherwise it doesn't. Since, AGE is a nullable column, it's possible to pass null
+	 for this column, when inserting a row. when you pass null for the age column, the boolean
+	 expression evaluates to Unkown, and allows the value.
+	 
+	 To Drop the check Constraint :
+	   Alter Table tblParson
+	   Drop Constraint CK_tblparson_age
+	   
+	   Syntex:
+	    Alter table tblParson
+		add contraint ck_tblperson_age check (age > 0 and Age < 150)

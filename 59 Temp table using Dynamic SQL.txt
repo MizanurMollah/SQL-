@@ -1,0 +1,48 @@
+DECLARE @sql NVARCHAR(MAX);
+SET @sql = 'CREATE TABLE #Test (Id int);
+            INSERT INTO #Test VALUES (101);
+            SELECT * FROM #Test;';
+
+EXEC(@sql);
+
+
+Create Proc SP_TempTableInDYnamicSQL
+As
+Begin      
+
+     Create table #test (id int)
+
+	 Insert into #test Values (101)
+	 Declare @sql Nvarchar(max)
+	 Set @sql ='Select * from #test'
+	 Execute sp_executesql @sql
+
+	 end
+	 
+/*
+-- Creating, inserting & Selecting from temp table all happends un the dynamic sql
+-- code block, so we are able to access the temp tble without any issue.
+so we get the error object name' #Test'
+
+This Proves the porint temp table create dy dynamic Sql are not accessble from
+the calling procedure. They are dropped when the dunamic sql block in the stored
+procedure complete excecution.
+
+
+*/
+
+/*
+
+Summary:  
+    Temp tables created by dynamic SQL are not accessible from
+	the calling Procedure.
+
+	They are dropped when the dynamic SQL block in the
+	stored procedure completeds execution.
+
+	On the other hand, Dynamic Sql Block can acces temp table crated
+	 by calling stored procedure.
+
+
+
+*/

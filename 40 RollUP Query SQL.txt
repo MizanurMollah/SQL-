@@ -1,0 +1,58 @@
+-- ====================================================
+-- Calculate Total Salary Using ROLLUP, GROUPING SETS, and UNION ALL
+-- ====================================================
+
+-- Total salary with ROLLUP
+-- Includes detailed breakdown and hierarchical totals
+WITH RollupTotals AS (
+    SELECT 
+        Country, 
+        Gender, 
+        SUM(Salary) AS TotalSalary
+    FROM 
+        Employees
+    GROUP BY 
+        ROLLUP (Country, Gender)
+),
+
+-- Total salary with GROUPING SETS
+-- Includes total salary by Country, Gender, and combinations thereof
+GroupingSetsTotals AS (
+    SELECT 
+        Country, 
+        Gender, 
+        SUM(Salary) AS TotalSalary
+    FROM 
+        Employees
+    GROUP BY 
+        GROUPING SETS (
+            (Country, Gender),  -- By Country and Gender
+            (Country),          -- By Country only
+            (Gender),           -- By Gender only
+            ()                  -- Grand Total
+        )
+)
+
+-- Combine results from both methods using UNION ALL
+SELECT 
+    'ROLLUP' AS Method,
+    Country, 
+    Gender, 
+    TotalSalary
+FROM 
+    RollupTotals
+
+UNION ALL
+
+SELECT 
+    'GROUPING SETS' AS Method,
+    Country, 
+    Gender, 
+    TotalSalary
+FROM 
+    GroupingSetsTotals
+
+ORDER BY 
+    Method, 
+    Country, 
+    Gender;

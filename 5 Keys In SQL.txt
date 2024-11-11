@@ -1,0 +1,109 @@
+primary key:
+    A primary key is a unique identifier for each record in a database table, ensuring no duplicate or NULL values.
+	1. Uniqueness: No two records can have the same value for the primary key.
+	2. Not Null: A primary key cannot have a NULL value; every record must have a valid key.
+	Syntex: 
+			CREATE TABLE Customers (
+			CustomerID INT PRIMARY KEY,
+			FirstName VARCHAR(50),
+			LastName VARCHAR(50)
+		);
+
+Foreign Key:
+
+	A foreign key is a field in a database table that creates a link between two tables. 
+	It refers to the primary key in another table, establishing a relationship between the two. 
+	This helps maintain referential integrity by ensuring that the value in the foreign key 
+	column matches an existing value in the referenced table.
+	Syntex:
+	      CREATE TABLE Orders (
+			OrderID INT PRIMARY KEY,
+			CustomerID INT,
+			OrderDate DATE,
+			FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
+		);
+
+Unique key :
+	A unique key ensures all values in a column are distinct, 
+	allowing one NULL value, and prevents duplicates in a 
+	database table.
+	
+	Syntex: CREATE TABLE Users (
+				UserID INT PRIMARY KEY,
+				Email VARCHAR(100) UNIQUE
+			);
+
+	
+Composite key :
+	A composite key is a combination of two or more columns that uniquely
+	identifies a record in a table. It ensures that no two rows have 
+	the same values for those columns.
+	Syntex: 
+			CREATE TABLE OrderDetails (
+							OrderID INT,
+							ProductID INT,
+							Quantity INT,
+							PRIMARY KEY (OrderID, ProductID)  -- Composite Key
+						);
+
+		In this example:
+
+			The composite key is made up of OrderID and ProductID.
+			Together, these two columns uniquely identify each record in the OrderDetails table, 
+			allowing a customer to order multiple products within a single order.
+			
+		Benefits:
+			Data Integrity: Ensures that each record is unique based on multiple attributes.
+			Normalization: Helps in organizing data efficiently by reducing redundancy.
+			
+Candidate Key: 
+	A column or set of columns that can uniquely identify a record and is a potential candidate for the primary key.
+		Syntex:
+			 CREATE TABLE Products (
+			ProductID INT PRIMARY KEY,
+			SKU VARCHAR(50) UNIQUE,  -- Candidate Key
+			ProductName VARCHAR(100)
+		);
+		
+Surrogate Key :
+    An artificially created key, usually a sequential number, used as a primary key.
+
+	Syntex:
+	    CREATE TABLE Products (
+					ProductID SERIAL PRIMARY KEY,  -- Surrogate Key
+					ProductName VARCHAR(100)
+				);
+  These keys play crucial roles in defining relationships and maintaining data integrity within a relational database.
+  
+  
+  All keys used:
+  
+  
+  -- Table 1: Department
+CREATE TABLE Department (
+    DepartmentID INT PRIMARY KEY,                  -- Primary Key
+    DepartmentName VARCHAR(100) UNIQUE NOT NULL,   -- Unique and Not Null Constraints
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP  -- Default Constraint
+);
+
+-- Table 2: Employee
+CREATE TABLE Employee (
+    EmployeeID INT,                                -- Part of Composite Key
+    FirstName VARCHAR(50) NOT NULL,                -- Not Null Constraint
+    LastName VARCHAR(50) NOT NULL,                 -- Not Null Constraint
+    DepartmentID INT,                              -- Foreign Key
+    Email VARCHAR(100) UNIQUE,                     -- Unique Constraint
+    Salary DECIMAL(10, 2) CHECK (Salary > 0),      -- Check Constraint
+    EmploymentStatus VARCHAR(10) DEFAULT 'Active', -- Default Constraint
+    DateOfJoining DATE NOT NULL,
+    
+    PRIMARY KEY (EmployeeID, DepartmentID),        -- Composite Primary Key
+    CONSTRAINT fk_department                       -- Foreign Key Constraint
+        FOREIGN KEY (DepartmentID) REFERENCES Department(DepartmentID)
+);
+
+-- Adding an index on the Email column
+CREATE INDEX idx_email ON Employee(Email);         -- Index
+
+
+

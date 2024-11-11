@@ -1,0 +1,133 @@
+Select Name,Gender, Salary, 
+
+lead (Salary,1, '') over (order by salary) as leads
+
+from Employees
+
+Select Name,Gender, Salary, 
+
+lag (Salary) over (order by salary) as leads
+
+from Employees
+
+SELECT Name, Gender, Salary, 
+       LEAD(Salary, 5, 'null') OVER (ORDER BY Salary) AS leads
+FROM Employees;
+SELECT Name, Gender, Salary, 
+       lag(Salary, 5, -1) OVER (ORDER BY Salary) AS leads
+FROM Employees;
+
+SELECT Name, Gender, Salary, 
+       LEAD(Salary, 1, NULL) OVER (PARTITION BY Gender ORDER BY Salary) AS leads,
+	   lag(Salary, 1, NULL) OVER (PARTITION BY Gender ORDER BY Salary) AS lags
+FROM Employees;
+
+To provide a complete explanation of using the LEAD and LAG functions with PARTITION BY in SQL, I'll break down all the details involved. The following explanation includes concepts, syntax, and examples to make everything clear.
+
+1. LEAD and LAG Functions
+The LEAD and LAG functions are part of SQL Server’s window functions. These are used to access data from other rows without performing a JOIN or a self-join. They help compare rows in relation to the current row.
+
+LEAD: Retrieves data from the next row in the result set.
+LAG: Retrieves data from the previous row in the result set.
+2. PARTITION BY Clause
+The PARTITION BY clause divides the result set into partitions (or groups) and applies the window function to each partition independently. Think of it as an equivalent of the GROUP BY clause, but it doesn't aggregate data; it just logically groups rows.
+
+3. Syntax for LEAD and LAG Functions with PARTITION BY
+sql
+Copy code
+LEAD (column_name, [offset], [default_value]) OVER (PARTITION BY partition_expression ORDER BY order_expression)
+column_name: The column from which the value is fetched.
+offset: The number of rows forward or backward (default is 1).
+default_value: The value to return if there is no row at the specified offset (optional).
+PARTITION BY: Groups the result set into partitions.
+ORDER BY: Specifies the order of rows within each partition.
+4. Detailed Example
+Table: Employees
+Assume we have the following table:
+
+Name	Gender	Salary
+John	Male	1000
+Steve	Male	1500
+Mark	Male	1200
+Sarah	Female	1300
+Lucy	Female	1400
+Anna	Female	1600
+5. Using LEAD with PARTITION BY
+Let's use the LEAD function to get the next salary in each gender group.
+
+sql
+Copy code
+SELECT Name, Gender, Salary, 
+       LEAD(Salary, 1, NULL) OVER (PARTITION BY Gender ORDER BY Salary) AS NextSalary
+FROM Employees;
+Explanation:
+
+LEAD(Salary, 1, NULL): Fetches the salary from the next row within the same partition (gender group). If no next row exists, it returns NULL.
+PARTITION BY Gender: Divides the result set by Gender. The function will be applied separately to the Male and Female groups.
+ORDER BY Salary: Orders the employees by their Salary within each partition.
+Output:
+Name	Gender	Salary	NextSalary
+John	Male	1000	1200
+Mark	Male	1200	1500
+Steve	Male	1500	NULL
+Sarah	Female	1300	1400
+Lucy	Female	1400	1600
+Anna	Female	1600	NULL
+6. Using LAG with PARTITION BY
+Now, let's use the LAG function to get the previous salary in each gender group.
+
+sql
+Copy code
+SELECT Name, Gender, Salary, 
+       LAG(Salary, 1, NULL) OVER (PARTITION BY Gender ORDER BY Salary) AS PrevSalary
+FROM Employees;
+Explanation:
+
+LAG(Salary, 1, NULL): Fetches the salary from the previous row within the same partition. If no previous row exists, it returns NULL.
+PARTITION BY Gender: Divides the result set by Gender. The function will operate separately on the Male and Female partitions.
+ORDER BY Salary: Orders the employees by their Salary within each gender group.
+Output:
+Name	Gender	Salary	PrevSalary
+John	Male	1000	NULL
+Mark	Male	1200	1000
+Steve	Male	1500	1200
+Sarah	Female	1300	NULL
+Lucy	Female	1400	1300
+Anna	Female	1600	1400
+7. Explanation of Key Components
+Window Functions (LEAD/LAG): These functions are applied over a
+ result set, and they allow access to other rows in the same result set without performing joins.
+
+PARTITION BY Clause: Groups the result set into partitions,
+ and the window function operates within each partition independently.
+
+ORDER BY Clause: This defines the order of rows within each
+ partition, which is crucial for determining the next/previous values that LEAD and LAG will return.
+
+8. Use Case Examples
+Lead Example: You want to calculate the salary difference
+ between an employee and the next one within the same gender group.
+
+sql
+Copy code
+SELECT Name, Gender, Salary, 
+       LEAD(Salary) OVER (PARTITION BY Gender ORDER BY Salary) - Salary AS SalaryDifference
+FROM Employees;
+Lag Example: You want to find out how an employee's salary compares to the previous employee's salary in the same gender group.
+
+sql
+Copy code
+SELECT Name, Gender, Salary, 
+       Salary - LAG(Salary) OVER (PARTITION BY Gender ORDER BY Salary) AS SalaryDifference
+FROM Employees;
+9. Notes:
+The LEAD function is useful when you need to look forward (get the next row’s data).
+The LAG function is useful when you need to look backward (get the previous row’s data).
+When using PARTITION BY, each partition is treated independently, meaning the functions 
+operate within each partition, and the result set is divided into groups defined by the PARTITION BY column.
+Conclusion:
+Using LEAD and LAG with PARTITION BY is a powerful way to analyze and compare data in SQL.
+ It allows you to look forward and backward in a result set while maintaining logical 
+ groupings (partitions) based on your data’s natural categories.
+
+Let me know if you'd like more examples or clarifications on any part of this!

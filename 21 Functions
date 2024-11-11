@@ -1,0 +1,86 @@
+What is function?
+ function is reusable code that performs a specific task and can return a result.
+ Function 3 Types:
+ 1. Scaler Function.
+ 2. Table valued Fanction.
+ 3. Multi Statement table-valued function.
+ 
+ 1. Scaler Function:
+     It is Return single valued return.
+	 
+	 Syntex:
+	  		  SELECT dbo.Function_Name(5, 6) AS Result;
+
+					CREATE FUNCTION Function_Name 
+						(
+						  @a INT,
+						  @b INT
+						)
+						RETURNS INT
+						AS
+						BEGIN 
+						  DECLARE @c INT;
+						  SET @c = @a + @b;
+						  RETURN @c;
+						END;
+
+ 2. Table valued functions
+      Table as the return type, instesd of any scalar data type.
+	  The function body is not enclose begin and end block
+	  The Structure of the table that gets returned, is determined by the 
+	  selecr statement with in the function.
+	  
+	  Syntex:
+	  CREATE function Table_value function
+	  (
+	   @a int
+	   )
+	   returns
+	   as 
+	   return
+	   Select * from employeeMaster where employessID= @a
+ 
+  3. Multi statement table values functions;
+  
+			Function Definition: The function MSTV_empMas returns a table variable @t with specific columns (id, firstname, lastname, and salary).
+			Populating the Table Variable: The INSERT INTO @t statement adds rows from the EmployeeMaster table to the @t table.
+			Querying the Function: Use the WHERE clause in the SELECT statement that calls the function to filter results, rather than within the function itself.
+
+
+					ALTER FUNCTION MSTV_empMas ()
+					RETURNS @t TABLE 
+					(
+					  id INT,
+					  firstname VARCHAR(200),
+					  lastname VARCHAR(200),
+					  salary INT
+					)
+					AS 
+					BEGIN 
+					  INSERT INTO @t 
+					  SELECT EmployeeID, FirstName, LastName, Salary 
+					  FROM EmployeeMaster;
+					  
+					  RETURN;
+					END;
+					
+					SELECT * 
+					FROM dbo.MSTV_empMas() 
+					WHERE id = 1;
+					Explanation
+
+
+
+  Deterministic Function:
+  Always return the same result any time they are called with a specific set of input values
+  teand given the same state of the database.
+  
+  Ex: Squre, sum , avg etc.
+  
+  Nondeterministic function: May return different each time they are called with a
+  specific set of values even if the database state that access remains the same
+  
+  Example: GetDate() and Currecn_timeStamp.
+
+
+

@@ -1,0 +1,256 @@
+
+Here’s a comprehensive list of SQL query-based interview questions that cover a wide range of SQL topics. You can practice writing queries for each of these questions to improve your SQL skills.
+
+Basic SQL Query Questions
+Write a query to retrieve all records from the Employees table.
+Write a query to retrieve the distinct job titles from the Employees table.
+Write a query to count the number of employees in the Employees table.
+Write a query to retrieve all employees whose first name starts with 'A'.
+Write a query to retrieve all employees hired in the year 2020.
+Write a query to find the maximum salary from the Employees table.
+Write a query to find the average salary for employees in the Employees table.
+Write a query to delete all employees who are on probation.
+Write a query to update the salary of an employee by 10% where the employee's ID is 101.
+Write a query to insert a new employee record into the Employees table.
+SQL Join Queries
+Write a query to retrieve employee details along with their department name using a JOIN.
+Write a query to retrieve all employees, including those who are not assigned to a department (use LEFT JOIN).
+Write a query to retrieve all departments and the count of employees in each department.
+Write a query to get a list of employees who work in the Sales department (use INNER JOIN).
+Write a query to get all employees and their managers using a self-join.
+Write a query to find all employees who do not belong to any department.
+Write a query to retrieve employees whose job title matches those of employees in the HR department.
+Write a query to find employees who have the same salary as someone in a different department.
+Write a query to find employees who work in both the Marketing and Sales departments (use INTERSECT or EXISTS).
+Write a query to get employees who do not belong to the IT department (use EXCEPT or NOT IN).
+SQL Subquery Questions
+Write a query to find the employee with the second-highest salary using a subquery.
+Write a query to retrieve employees whose salary is above the department average salary.
+Write a query to find employees whose salaries are greater than the average salary of their managers.
+Write a query to find all employees who have a higher salary than the average salary of all employees in the Employees table.
+Write a query to get all employees who were hired before a specific employee (use subquery).
+Write a query to find employees who earn more than the average salary in their department using a correlated subquery.
+Write a query to find all employees who do not have any subordinates.
+Write a query to find employees who have the same job title as someone earning more than $50,000.
+Write a query to get the name of the department with the most employees.
+Write a query to retrieve employees who have the highest salary in their respective departments.
+Advanced SQL Query Questions
+Write a query to get the running total of salaries for employees ordered by their hire date.
+Write a query to calculate the cumulative sum of sales for each day.
+Write a query to find the top 3 highest-paid employees in each department.
+Write a query to rank employees by their salary within each department.
+Write a query to transpose rows to columns using a PIVOT table.
+Write a query to calculate the difference between the highest and lowest salaries for each department.
+Write a query to find employees who have been in the company for more than 5 years.
+Write a query to find employees who have a salary between the average and the highest salary in the company.
+Write a query to calculate the monthly sales totals for the current year.
+Write a query to find employees who have the same first name but work in different departments.
+Performance Tuning and Optimization Query Questions
+Write a query to retrieve the last 10 records from a large table with millions of rows.
+Write a query to retrieve the top 3 highest-paid employees, but the query should be optimized for performance.
+Write a query to count the number of employees without performing a full table scan.
+Write a query to retrieve records from a table using indexing efficiently.
+Write a query to remove duplicate records from a table without using the ROW_NUMBER() function.
+Write an optimized query to retrieve employees based on their department and job title, assuming the table has millions of rows.
+Write a query that retrieves employees with a specific job title but executes quickly even when there are millions of records.
+Write a query to find the most frequent job title in the Employees table in an optimized way.
+Write a query to retrieve employee records from a partitioned table.
+Write a query that ensures minimal locking and avoids deadlocks when updating employee records.
+Window Functions Query Questions
+Write a query to retrieve the rank of employees based on their salary using the RANK() function.
+Write a query to retrieve the ROW_NUMBER() for each employee within their department.
+Write a query to calculate the running total of salaries using a window function.
+Write a query to calculate the cumulative sum of sales using window functions.
+Write a query to find the difference between the current and previous employee's salary.
+Write a query to retrieve employees along with the difference in their salaries from the department's highest salary.
+Write a query to retrieve employees along with their average salary over the last 3 years using window functions.
+Write a query to calculate the moving average of employee salaries using window functions.
+Write a query to partition employee records by department and rank them by hire date.
+Write a query to find the minimum salary in each department using the OVER() clause.
+Miscellaneous Query Questions
+Write a query to get the first 3 characters of an employee’s first name.
+Write a query to concatenate the first and last name of employees.
+Write a query to get the difference between two date columns (e.g., how long an employee has been with the company).
+Write a query to convert the salary of employees from one currency to another.
+Write a query to split a comma-separated string into individual rows.
+Write a query to generate a list of years between 2010 and the current year.
+Write a query to find employees who have a birthday in the current month.
+Write a query to format employee hire dates in MM-DD-YYYY format.
+Write a query to delete all records older than 10 years from a table.
+Write a query to replace all occurrences of a specific character in a string with another character.
+These query-based questions are designed to test your practical knowledge of SQL and your ability to write and optimize queries. They touch on various concepts, from basic operations and joins to advanced topics like window functions and performance tuning.
+
+
+2/2
+
+You said:
+each part al list 50 qustion more advance lavele
+ChatGPT said:
+ChatGPT
+Here’s a detailed and comprehensive list of 50 advanced query-based SQL interview questions for each major section. These questions aim to challenge your SQL skills and cover a wide variety of advanced topics. You can practice writing the actual queries for each question.
+
+I. Advanced Basic SQL Query Questions (50)
+Write a query to fetch employee names and their annual salary, calculated from a monthly salary column.
+Write a query to retrieve all employees who are younger than 30 and have been working for more than 5 years.
+Write a query to fetch the last 10 records from the Employees table.
+Write a query to get the sum of salaries for employees grouped by job titles.
+Write a query to find the top 3 most frequent job titles.
+Write a query to display the hire date in 'YYYY-MM-DD' format.
+Write a query to fetch employee names along with their hire date, sorted by hire date in descending order.
+Write a query to fetch employees whose salary is between 50,000 and 100,000.
+Write a query to retrieve employees who were hired in the last 3 months.
+Write a query to count employees with different job titles.
+Write a query to find employees whose salary is higher than 75% of the employees in the company.
+Write a query to retrieve all employees who work on the second shift.
+Write a query to find all employees who have been with the company for more than 10 years.
+Write a query to fetch employees whose last names contain the letter ‘e’.
+Write a query to find the maximum salary for each department.
+Write a query to return only unique combinations of department and job title.
+Write a query to find the highest and lowest salary in the Employees table.
+Write a query to retrieve the first 5 characters of each employee's first name.
+Write a query to find all employees who earn more than the average salary of their department.
+Write a query to delete all records older than 5 years from the EmployeeLog table.
+Write a query to retrieve employees whose salary is in the top 10% of the company.
+Write a query to update an employee’s title if their salary exceeds a certain amount.
+Write a query to find employees who have both a manager and a subordinate.
+Write a query to count the number of employees hired each month in the current year.
+Write a query to retrieve all employees who work in cities that start with 'San'.
+Write a query to list employees whose first names have the same letters as their last names.
+Write a query to display all employees in the order they were hired.
+Write a query to retrieve all employees who work in more than one department.
+Write a query to calculate the number of days each employee has worked.
+Write a query to find employees who do not have a salary recorded (use NULL handling).
+Write a query to find employees with the longest employment history.
+Write a query to return employees whose salary is greater than the average salary for their job title.
+Write a query to fetch employees whose names consist of at least three vowels.
+Write a query to retrieve employee details if their hire date is a leap year.
+Write a query to fetch employee records where both the first name and last name are palindrome strings.
+Write a query to retrieve employees whose ID is even.
+Write a query to list employees who work in more than one city.
+Write a query to show employee details whose job title starts and ends with the same letter.
+Write a query to return the name of the employee who has been promoted the most times.
+Write a query to retrieve all employees whose salary has increased by more than 10% in the last year.
+Write a query to retrieve the department with the highest average employee tenure.
+Write a query to fetch the highest salary in each job title, grouped by job title.
+Write a query to find employees with salaries that are multiples of 5000.
+Write a query to display employee records with missing information in any field.
+Write a query to get the full names of all employees whose last name starts with a vowel.
+Write a query to display the number of employees who have left the company in the last year.
+Write a query to calculate the cumulative total of employees' bonuses.
+Write a query to find employees whose start date is the first Monday of any month.
+Write a query to retrieve all employees whose names contain more than 10 characters.
+Write a query to fetch the first and last employee record alphabetically by name.
+II. Advanced SQL Join Queries (50)
+Write a query to retrieve all employees and their department names, even if the department is not assigned (use LEFT JOIN).
+Write a query to get employees who do not have a manager (use LEFT JOIN and NULL handling).
+Write a query to retrieve the details of employees who work in the same department as their manager.
+Write a query to get the department with the highest average salary using JOIN.
+Write a query to return a list of employees and the total number of projects they are working on (use JOIN).
+Write a query to list all employees who have more than one job title (use JOIN).
+Write a query to retrieve all employees who have not completed any projects.
+Write a query to list all employees and their direct managers (use self-join).
+Write a query to retrieve employee names and their manager's names.
+Write a query to list employees who share the same job title as their direct manager.
+Write a query to retrieve employees who have worked in more than one department.
+Write a query to fetch employees and the number of training sessions they have attended.
+Write a query to return employees who have worked with the same manager in different departments.
+Write a query to find all employees who have the same job title as at least one other employee (use self-join).
+Write a query to return employees whose job title has changed at least twice (use JOIN and GROUP BY).
+Write a query to return employees and their department's budget using a JOIN on the Department and Budget tables.
+Write a query to list all employees who have worked in two or more departments over their career (use JOIN).
+Write a query to find employees who have a higher salary than their manager (use self-join).
+Write a query to list employees who share the same department and salary (use JOIN).
+Write a query to retrieve employees who work on the same project as their manager.
+Write a query to find employees who belong to the same project but different departments (use JOIN).
+Write a query to list employees who share a common department with at least two other employees.
+Write a query to fetch all employees who work in both the HR and IT departments (use INTERSECT or EXISTS).
+Write a query to list employees and the number of departments they have worked in over their career.
+Write a query to return employees and their corresponding department heads (use JOIN).
+Write a query to retrieve all employees with at least one common project but in different departments.
+Write a query to find the department with the most employees.
+Write a query to list employees who have worked in the same department multiple times during their career.
+Write a query to find employees who have managed projects in different departments (use JOIN).
+Write a query to list all employees who report to multiple managers (use self-join).
+Write a query to fetch employees who have never worked in the Sales department (use EXCEPT).
+Write a query to retrieve employees who have the same department name but different job titles.
+Write a query to return the list of departments with no employees assigned (use LEFT JOIN).
+Write a query to find all employees who work under more than one department head (use self-join).
+Write a query to return employees who have worked with the same project manager in two different projects.
+Write a query to retrieve employees and their salaries, along with the average salary of their department.
+Write a query to find employees whose project count is less than the department's project count.
+Write a query to find employees who report to the same manager but work in different departments.
+Write a query to list employees and their salaries, and the department head’s salary for comparison.
+Write a query to fetch employees who have at least one common training session (use JOIN).
+Write a query to retrieve employees who have received promotions in multiple departments.
+Write a query to list employees who were hired on the same day as their manager.
+Write a query to fetch all employees who have completed projects managed by their direct supervisor.
+Write a query to list employees who work in departments that share the same budget allocation (use JOIN).
+Write a query to return the employees and their project names where the employee is also the project manager.
+Write a query to list all employees who have worked under two or more managers during their career.
+Write a query to fetch employees and their managers where both share the same last name.
+Write a query to return employees whose current department budget exceeds the company's average budget.
+Write a query to find employees who have worked in the same project in different departments.
+Write a query to list employees who have the same job title but report to different managers (use JOIN).
+III. Advanced Subquery SQL Questions (50)
+Write a query to find the third-highest salary using a subquery.
+Write a query to retrieve employees who have the same salary as their manager (use subquery).
+Write a query to fetch employees whose salaries are higher than the department's average salary.
+Write a query to retrieve employees who have worked longer than their manager.
+Write a query to list employees who are the highest-paid in their respective departments using a subquery.
+Write a query to find employees who have the same job title as someone in another department.
+Write a query to fetch employees whose hire date is before their manager's hire date (use subquery).
+Write a query to retrieve employees whose salary is higher than 80% of the company’s employees.
+Write a query to return departments where no employees have been hired in the last 6 months.
+Write a query to retrieve employees who are the oldest in their department (use subquery).
+Write a query to find employees whose salary is greater than the average salary of the company.
+Write a query to list employees whose salary is lower than the highest salary of another department.
+Write a query to find employees who have the same hire date as their department head (use subquery).
+Write a query to retrieve departments that have no employees with a salary above $100,000.
+Write a query to list employees whose salary is equal to the minimum salary in the company.
+Write a query to find employees who have not received a promotion in the last 5 years.
+Write a query to list all employees who report to a department head who earns less than the company average.
+Write a query to fetch employees whose salary is the second-highest in the company (use subquery).
+Write a query to find employees who earn more than any employee in another department.
+Write a query to return departments where all employees earn above the company's average salary.
+Write a query to retrieve employees whose salary is higher than any of their peers in the same department.
+Write a query to find employees whose salaries are higher than their department's maximum salary 3 years ago.
+Write a query to list employees who have the same last name as another employee in a different department.
+Write a query to fetch departments with at least one employee who has been promoted more than once.
+Write a query to return employees who have never worked with their manager on the same project.
+Write a query to find employees who have the same first and last name as someone in a different department.
+Write a query to retrieve the departments where the number of employees is greater than the average.
+Write a query to list employees who have completed the most projects in their department.
+Write a query to return employees who have a higher salary than the company’s average but a lower salary than the department’s maximum.
+Write a query to find employees who have received a bonus every year for the past 3 years.
+Write a query to retrieve employees whose salary is the same as the minimum salary in another department.
+Write a query to return employees whose salary is equal to or higher than the highest-paid department head.
+Write a query to find employees who are the first person hired in their department (use subquery).
+Write a query to list employees who have received at least one bonus each year for the last 5 years.
+Write a query to return employees who were hired within 6 months of their manager.
+Write a query to find employees whose project count is less than the department’s average project count.
+Write a query to retrieve departments where all employees have received a promotion in the last year.
+Write a query to list employees who earn more than any employee in a higher-ranked department.
+Write a query to fetch employees who have been with the company for at least as long as their department head.
+Write a query to return employees who have completed the least number of projects in the company.
+Write a query to list employees who work in departments with fewer employees than the company average.
+Write a query to fetch employees who have completed more projects than the department head.
+Write a query to return departments where all employees have the same job title.
+Write a query to list employees who have received the highest salary raise in their department.
+Write a query to fetch departments with at least one employee who has never received a salary raise.
+Write a query to return employees who have received at least two salary raises in the last 3 years.
+Write a query to list employees who have the same salary as another employee in a different job title.
+Write a query to fetch employees whose salary is greater than 90% of their department peers.
+Write a query to find departments where all employees have worked for more than 5 years.
+Write a query to list employees who have been promoted in multiple departments.
+These questions delve deep into SQL topics, ensuring you're well-prepared for advanced interviews. They cover everything from optimization and performance tuning to intricate joins and subqueries. Practicing these will provide a solid foundation for advanced SQL interviews!
+
+
+
+
+
+
+
+
+
+
+ChatGPT can ma

@@ -1,0 +1,140 @@
+How to Generate Rendom Number:
+
+			DECLARE @LL INT;
+
+			SET @LL=1
+
+			DECLARE @UL INT;
+
+			SET @UL=10
+
+			SELECT Round(( @UL - @LL ) * Rand(), 0)
+
+			DECLARE @Rand INT
+
+			WHILE( @Rand <= 100 )
+			  BEGIN
+				  SELECT @Rand = Round (( @UL - @LL ) * Rand() + 1, 0)
+
+				  PRINT @Rand
+
+				  SELECT @Rand AS randdom_Number
+
+				  IF ( @Rand < 0
+						OR @Rand > 10 )
+					BEGIN
+						PRINT 'Error - ' + Cast(@Rand AS NVARCHAR(4))
+
+						BREAK
+					END
+			  END 
+			  
+			  select * from tblProductSales
+
+   ---- Check if the table is not empty
+   -- IF EXISTS (SELECT 1 FROM employees1)
+   -- BEGIN
+   --     PRINT 'Table is not empty. Deleting existing data...';
+   --     DELETE FROM employees1;
+   --     PRINT 'Existing data deleted.';
+   -- END
+   -- ELSE
+   -- BEGIN
+   --     PRINT 'Table is empty. No data to delete.';
+   -- END
+-- IF THE TABLE EXISTS DROP AND RECREATE TABLE-- SYNTAX
+ IF (EXISTS ( SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'tblProductSales'))
+ BEGIN
+
+ --SELECT * FROM tblProductSales
+     DROP TABLE tblProductSales
+
+	 
+ END
+
+ IF (EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME= 'tblProducts'))
+ BEGIN
+ DROP TABLE tblProducts
+ END
+
+ -- Create Products Table
+CREATE TABLE tblProducts
+(
+    [Id] INT IDENTITY PRIMARY KEY,
+    [Name] NVARCHAR(50),
+    [Description] NVARCHAR(250)
+);
+
+-- Create Product Sales Table
+CREATE TABLE tblProductSales
+(
+    [Id] INT IDENTITY PRIMARY KEY,
+    [ProductId] INT FOREIGN KEY REFERENCES tblProducts(Id),
+    [UnitPrice] INT,
+    [QuantitySold] INT
+);
+
+Select * from tblProducts
+Select * from tblProductSales
+
+DECLARE @Id INT = 1;
+
+SELECT 
+    'Product- ' + CAST(@Id AS NVARCHAR(20)) AS ProductName,
+    'Product- ' + CAST(@Id AS NVARCHAR(20)) + ' Description' AS ProductDescription;
+
+Declare @Id int;
+Set @id = 1
+while (@id <= 10000)
+begin
+     insert into tblProducts values('Product- ' + CAST(@Id as nvarchar(20)),
+	  'Product- ' +CAST(@Id as nvarchar(20)) + ' Discription')
+	  print @Id
+	  Set @Id = @id + 1
+end
+
+
+--Declare variable to hold a random ProductId, UnitProduct And QuantitySold
+
+Declare @RandomProductId int;
+Declare @RandomUnitPrice int;
+Declare @RandomQuantitySold Int;
+
+-- Declare and set Variable to generate a random ProductId Between 1 and 100000
+Declare @UpperLimitForProductId Int
+Declare @lowerLimitforProductID Int
+ set @UpperLimitForProductId =1;
+ set @lowerLimitforProductID =8500; 
+
+ -- Declare And Set variable to genarate a random Unit Price Between 1 and 100
+ Declare @UpperLimtForUnitPrice int;
+ Declare @LowerLimitforUnitPrice Int;
+ Set @UpperLimtForUnitPrice = 1;
+ Set @LowerLimitforUnitPrice =100;
+
+
+ --Declare and set variables to generate a random Quantity Sold between 1 ans 10;
+ Declare @UpperLimitForQuantitySold int
+ Declare @LowerLimtforQuantitySold int
+
+ set @UpperLimitForQuantitySold =1;
+ set @LowerLimtforQuantitySold =10;
+
+ -- Insert Sample Data Into tblProductSales Table
+
+ Declare @Counter int;
+ Set @Counter = 1;
+ While (@Counter <= 15000)
+ begin
+		Select @RandomProductId = Round (((@UpperLimitForProductId - @lowerLimitforProductID) * rand() + @lowerLimitforProductID), 0)
+		Select @RandomUnitPrice = Round (((@UpperLimtForUnitPrice - @LowerLimitforUnitPrice) * rand() + @LowerLimitforUnitPrice), 0)
+		Select @RandomQuantitySold = Round (((@UpperLimitForQuantitySold - @LowerLimtforQuantitySold) * rand() + @LowerLimtforQuantitySold), 0)
+		Insert into tblProductSales values (@RandomProductId,@RandomUnitPrice,@RandomQuantitySold)
+		
+		print @RandomProductId
+		print @RandomUnitPrice
+		print @RandomQuantitySold
+		Set @Counter = @Counter + 1
+
+		End
+

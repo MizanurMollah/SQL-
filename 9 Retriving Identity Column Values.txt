@@ -1,0 +1,9 @@
+There are sevaeral ways in sql servar, to retrive the identity value that os generated. the most common way 
+is to use Scope_Identity() built is function.
+
+Note: use- @@identity and IDENT_CURRECT('TableName')
+
+Difference:
+   1. Scope_Identity() - Same Session and the same Scope.
+   2. @@IDENTITY - same Session and acriss any scope.
+   3. IDENT_CURRECT('TableName') - Specific table across any session and any scope.

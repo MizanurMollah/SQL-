@@ -1,0 +1,177 @@
+Share
+
+
+You said:
+give correct sql query- Declare @sql navarchar(max)
+ set @sql= 'Create Table #Test (Id int)
+			Insert into #test Values(101)'
+
+		Execute @sql
+ChatGPT said:
+ChatGPT
+The issue with your query lies in the use of the Execute statement. In SQL Server, dynamic SQL is executed using sp_executesql or EXEC without the @ symbol for the variable name in the EXEC statement.
+
+Here is the corrected SQL query:
+
+sql
+Copy code
+DECLARE @sql NVARCHAR(MAX);
+SET @sql = 'CREATE TABLE #Test (Id int);
+            INSERT INTO #Test VALUES (101);';
+
+EXEC(@sql);
+This will dynamically create the temporary table #Test and insert the value 101 into it.
+
+
+
+
+
+
+You said:
+DECLARE @sql NVARCHAR(MAX);
+SET @sql = 'CREATE TABLE #Test (Id int);
+            INSERT INTO #Test VALUES (101);';
+select * from #test
+EXEC(@sql);
+ChatGPT said:
+ChatGPT
+The issue here is that the SELECT * FROM #Test is outside the context of the dynamic SQL execution, and since #Test is a temporary table, it's only accessible within the session or batch that created it. When using dynamic SQL, the temporary table #Test exists only inside the scope of the dynamic query and will not be accessible after the EXEC statement finishes.
+
+To fix this, you need to execute both the CREATE TABLE, INSERT, and the SELECT within the same dynamic SQL block:
+
+sql
+Copy code
+DECLARE @sql NVARCHAR(MAX);
+SET @sql = 'CREATE TABLE #Test (Id int);
+            INSERT INTO #Test VALUES (101);
+            SELECT * FROM #Test;';
+
+EXEC(@sql);
+In this case, the SELECT query is executed inside the same dynamic SQL block where the temporary table exists.
+
+
+
+What is Dynamic SQL?
+
+Dynamic SQL is a sql Bulit from at Runtime.
+
+Syntex: 
+			Declare @sql Nvarchar(1000)
+			Declare @parms nvarchar(1000)
+
+Set @Sql= 'Select * from Employee where FristName= @FristName and LastName = @LastName'
+set @parms = '@'
+ChatGPT said:
+ChatGPT
+Dynamic SQL is SQL code that is generated and executed at runtime rather than being 
+written statically in the script or application. It allows for more flexibility, 
+such as building queries based on user inputs, conditions, or changing parameters.
+
+What is Dynamic SQL?
+Dynamic SQL is SQL code constructed and executed at runtime. It allows you to 
+write queries that can change depending on various conditions, such as user input, 
+application logic, or data in the database. This is especially useful when the exact 
+structure of a query can't be determined beforehand or needs to be altered 
+based on the current situation.
+
+Syntax Example
+Here’s a corrected example based on your input, 
+with proper syntax and parameter usage:
+
+sql
+Copy code
+DECLARE @sql NVARCHAR(1000);
+DECLARE @parms NVARCHAR(1000);
+
+SET @sql = 'SELECT * FROM Employee WHERE FirstName = @FirstName AND LastName = @LastName';
+SET @parms = '@FirstName NVARCHAR(50), @LastName NVARCHAR(50)';
+
+EXEC sp_executesql @sql, @parms, @FirstName = 'John', @LastName = 'Doe';
+
+
+DECLARE @sql NVARCHAR(MAX);
+SET @sql = 'CREATE TABLE #Test (Id int);
+            INSERT INTO #Test VALUES (101);
+            SELECT * FROM #Test;';
+
+EXEC(@sql);
+
+
+Create Proc SP_TempTableInDYnamicSQL
+As
+Begin      
+
+     Create table #test (id int)
+
+	 Insert into #test Values (101)
+	 Declare @sql Nvarchar(max)
+	 Set @sql ='Select * from #test'
+	 Execute sp_executesql @sql
+
+	 end
+	 
+/*
+-- Creating, inserting & Selecting from temp table all happends un the dynamic sql
+-- code block, so we are able to access the temp tble without any issue.
+so we get the error object name' #Test'
+
+This Proves the porint temp table create dy dynamic Sql are not accessble from
+the calling procedure. They are dropped when the dunamic sql block in the stored
+procedure complete excecution.
+
+
+*/
+
+/*
+
+Summary:  
+    Temp tables created by dynamic SQL are not accessible from
+	the calling Procedure.
+
+	They are dropped when the dynamic SQL block in the
+	stored procedure completeds execution.
+
+	On the other hand, Dynamic Sql Block can acces temp table crated
+	 by calling stored procedure.
+
+
+
+*/
+
+
+-- Dynamic SQL with Input & Output Prarameter
+/*What is Dynamic SQL?
+Dynamic SQL is SQL code constructed and executed at runtime. 
+It allows you to write queries that can change depending 
+various conditions, such as user input, application logic,
+or data in the database. This is especially useful when the
+exact structure of a query can't be determined beforehand or 
+needs to be altered based on the current situation.
+
+Syntax Example
+Here’s a corrected example based on your input, 
+with proper syntax and parameter usage:
+
+*/
+DECLARE @sql NVARCHAR(1000);
+DECLARE @parms NVARCHAR(1000);
+
+SET @sql = 'SELECT * FROM Employees WHERE Name = @Name ';--AND Salary = @Salary';
+SET @parms = '@Name NVARCHAR(50)' --, @Salary int';
+
+EXEC sp_executesql @sql, @parms, @Name = 'John', @Salary = 4500;
+--Breakdown:
+DECLARE @sql NVARCHAR(1000);
+--This declares a variable to store the dynamic SQL string.
+
+DECLARE @parms NVARCHAR(1000);
+--This declares a variable to store the parameters that will be passed to the dynamic SQL query.
+
+SET @sql = 'SELECT * FROM Employee WHERE FirstName = @FirstName AND LastName = @LastName';
+--This sets the @sql variable with the query string.
+
+SET @parms = '@FirstName NVARCHAR(50), @LastName NVARCHAR(50)';
+--This sets the @parms variable to define the types of parameters that will be passed.
+
+EXEC sp_executesql @sql, @parms, @FirstName = 'John', @LastName = 'Doe';
+--sp_executesql is used to execute the dynamic SQL with the provided parameters.

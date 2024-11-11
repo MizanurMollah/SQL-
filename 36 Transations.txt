@@ -1,0 +1,95 @@
+What IS TRANSACTION??
+
+ANS:
+	A transaction in SQL is a sequence of operations executed as a single
+	unit of work. It ensures that either all operations complete successfully
+	or none do, preserving data integrity. Key properties are:
+
+			Atomicity: All or nothing.
+			Consistency: Maintains database rules.
+			Isolation: Transactions do not interfere with each other.
+			Durability: Committed changes are permanent.
+			
+	Note: Commands include BEGIN TRANSACTION, COMMIT, and ROLLBACK.
+	
+	Syntex:
+	
+	select * from tblProduct
+
+		Begin Transaction
+		Update tblProduct set qtyAvailable = '1000' where productID= 1
+		 Rollback Transaction
+		 commit Transaction
+		 
+		 NEW TAB:
+		 
+		 Oprations ongoing:
+		 
+		 Use: SQL Transaction ISOLATION level Read Uncommitted
+		 
+			select * from tblProduct
+			
+			
+			select * from tblPhysicalAddress
+select * from tblMailingAddress
+
+alter Procedure SP_Transactions
+
+as 
+begin
+     begin try
+	       begin transaction 
+
+		   Update tblPhysicalAddress set City='LONDO00N' where AddressId = 1 and EmployeeNumber = 101
+
+		   Update tblMailingAddress set City='LONDO00N' where AddressId = 1 and EmployeeNumber = 101
+		   commit  Transaction
+		   Select 'The Transaction is Commited'
+	 end Try
+
+	 begin Catch
+			Rollback Transaction
+			Select ' Catch Bolck Executed'
+	 End catch
+End
+
+
+
+
+ACID TEST:
+
+			Atomicity: All or nothing.
+			Consistency: Maintains database rules.
+			Isolation: Transactions do not interfere with each other.
+			Durability: Committed changes are permanent.
+			
+			ACID Test
+
+A transaction is a group of commands treated
+ as a single unit. A successful transaction must pass the ACID test.
+
+Atomicity: All statements in the transaction either complete successfully
+ or none of them do. The task that the set of operations represents is 
+ accomplished or not, ensuring no operations are left half-done.
+
+Consistency: All data touched by the transaction is left in a logically
+ consistent state. For example, if stock numbers are decremented from tblProductTable
+ , there must be a related entry in tblProductSalesTable.
+ The inventory cannot just disappear.
+
+Isolation: The transaction must not affect data by interfering 
+with other concurrent transactions, nor should it be affected by them.
+ This prevents transactions from making changes to data based on 
+ uncommitted information, such as a record that is subsequently rolled back.
+ Most databases use locking to maintain transaction isolation.
+
+Durability: Once a change is made, it is permanent.
+ If a system error or power failure occurs before a set of
+ commands is complete, those commands are undone, and the data
+ is restored to its original state once the system is running again.
+			
+
+
+
+		 
+		 

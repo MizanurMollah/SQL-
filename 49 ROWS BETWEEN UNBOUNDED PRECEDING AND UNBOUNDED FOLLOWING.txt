@@ -1,0 +1,64 @@
+Here’s a one-page, beautifully formatted SQL query, complete with detailed
+ comments for clarity, ensuring it’s both functional and aesthetically pleasing.
+ This version combines the metrics you wanted while maintaining an organized structure.
+
+Comprehensive SQL Query for Salary Metrics by Gender
+sql
+Copy code
+-- SQL Query to Calculate Salary Metrics by Gender
+SELECT 
+    Name, 
+    Gender, 
+    Salary,
+    
+    /* Overall Average Salary across all employees */
+    AVG(Salary) OVER (
+        ORDER BY Salary 
+        ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+    ) AS OverallAvgSalary,
+    
+    /* Count of salaries grouped by Gender */
+    COUNT(Salary) OVER (
+        PARTITION BY Gender 
+        ORDER BY Salary 
+        ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+    ) AS GenderCount,
+    
+    /* Total Salary for each Gender group */
+    SUM(Salary) OVER (
+        PARTITION BY Gender 
+        ORDER BY Salary 
+        ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+    ) AS GenderTotalSalary,
+    
+    /* Average Salary for each Gender group */
+    AVG(Salary) OVER (
+        PARTITION BY Gender 
+        ORDER BY Salary 
+        ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+    ) AS PartitionedAvgSalary
+
+FROM 
+    Employees  -- Source table for employee data
+
+ORDER BY 
+    Gender, Salary;  -- Ordering results for better readability
+Key Features of This Query
+Structured and Clear: The query is organized with a consistent indentation style, enhancing readability.
+Descriptive Comments: Each calculation is accompanied by comments that explain its purpose, aiding in understanding and maintenance.
+Use of Window Functions: The use of AVG, COUNT, and SUM window functions allows for powerful calculations without the need for subqueries.
+Final Output Order: The ORDER BY clause at the end of the query sorts the results, making it easy to read and analyze the data.
+Example Output Structure
+The output will include the following columns:
+
+Name	Gender	Salary	OverallAvgSalary	GenderCount	GenderTotalSalary	PartitionedAvgSalary
+John	Male	1000	(Avg Salary)	(Count)	(Total Salary)	(Avg by Gender)
+Mark	Male	1200	(Avg Salary)	(Count)	(Total Salary)	(Avg by Gender)
+Steve	Male	1500	(Avg Salary)	(Count)	(Total Salary)	(Avg by Gender)
+Sarah	Female	1300	(Avg Salary)	(Count)	(Total Salary)	(Avg by Gender)
+Lucy	Female	1400	(Avg Salary)	(Count)	(Total Salary)	(Avg by Gender)
+Anna	Female	1600	(Avg Salary)	(Count)	(Total Salary)	(Avg by Gender)
+Conclusion
+This comprehensive SQL query serves as a complete solution for calculating salary
+ metrics categorized by gender, presented in a clear and professional manner. 
+ If you have further requests or need additional modifications, just let me know!

@@ -1,0 +1,46 @@
+CREATE TABLE CurrentEmployees (
+    EmployeeID INT,
+    FullName VARCHAR(50),
+    Age INT,
+    Dept VARCHAR(50)
+);
+
+INSERT INTO CurrentEmployees (EmployeeID, FullName, Age, Dept) VALUES
+(1, 'Alice', 30, 'HR'),
+(2, 'Bob', 25, 'IT'),
+(3, 'Charlie', 28, 'Finance');
+
+
+CREATE TABLE PreviousEmployees (
+    EmployeeID INT,
+    FullName VARCHAR(50),
+    Age INT,
+    Dept VARCHAR(50)
+);
+
+INSERT INTO PreviousEmployees (EmployeeID, FullName, Age, Dept) VALUES
+(2, 'Bob', 25, 'IT'),
+(3, 'Charlie', 28, 'Finance'),
+(4, 'David', 35, 'Marketing');
+
+select EmployeeID, FullName, Age, Dept from CurrentEmployees
+--except Combines the results two table uncommon are return from left table
+--EXCEPT: Returns rows from the first query that are not present in the second query.
+
+except 
+select EmployeeID, FullName, Age, Dept from PreviousEmployees
+
+select EmployeeID, Age, Dept from CurrentEmployees
+--UNION: Combines the results of two queries and removes duplicates.
+union 
+select EmployeeID, Age, Dept from PreviousEmployees
+
+select EmployeeID, Age, Dept from CurrentEmployees
+--UNION ALL: Combines the results of two queries and includes duplicates.
+union all
+select EmployeeID, Age, Dept from PreviousEmployees
+
+SELECT EmployeeID, FullName, Age, Dept FROM CurrentEmployees
+-- INTERSECT: Returns rows that are common to both queries.
+Intersect 
+SELECT EmployeeID, FullName, Age, Dept FROM PreviousEmployees;

@@ -1,0 +1,61 @@
+Example with Running Total
+Let's use the Employee table to demonstrate a running total based on the Salary column.
+
+Table and Data Setup
+Assuming the Employee table is already populated with the sample data we inserted earlier:
+
+sql
+Copy code
+-- Employee table assumed to have columns: EmployeeID, EmployeeName, Department, Salary
+
+-- Query to calculate running total of salaries
+SELECT 
+    EmployeeID,
+    EmployeeName,
+    Department,
+    Salary,
+    SUM(Salary) OVER (ORDER BY EmployeeID) AS RunningTotal
+FROM Employee
+ORDER BY EmployeeID;
+Explanation
+SUM(Salary) OVER (ORDER BY EmployeeID): This calculates a running total of the Salary column.
+ORDER BY EmployeeID: Specifies the order in which rows are processed to calculate the running total. In this case, it's ordered by EmployeeID.
+AS RunningTotal: Assigns an alias to the calculated running total column.
+Expected Output
+Here's how the output would look for the running total:
+
+EmployeeID	EmployeeName	Department	Salary	RunningTotal
+1	Alice	HR	5000	5000
+2	Bob	HR	4000	9000
+3	Charlie	IT	6000	15000
+4	David	IT	6000	21000
+5	Eva	Finance	7000	28000
+6	Frank	Finance	7000	35000
+Using Partitioning
+If you want to calculate a running total within each department, you can use the PARTITION BY clause:
+
+sql
+Copy code
+-- Running total within each Department
+SELECT 
+    EmployeeID,
+    EmployeeName,
+    Department,
+    Salary,
+    SUM(Salary) OVER (PARTITION BY Department ORDER BY EmployeeID) AS RunningTotalByDept
+FROM Employee
+ORDER BY Department, EmployeeID;
+Explanation
+PARTITION BY Department: Divides the result set into partitions by Department and calculates the running total within each partition.
+ORDER BY EmployeeID: Orders the rows within each partition by EmployeeID for the running total calculation.
+Expected Output
+The output will display running totals for each department:
+
+EmployeeID	EmployeeName	Department	Salary	RunningTotalByDept
+1	Alice	HR	5000	5000
+2	Bob	HR	4000	9000
+3	Charlie	IT	6000	6000
+4	David	IT	6000	12000
+5	Eva	Finance	7000	7000
+6	Frank	Finance	7000	14000
+This allows you to see the cumulative sum of salaries within each department, providing more detailed insights.

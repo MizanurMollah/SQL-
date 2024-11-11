@@ -1,0 +1,49 @@
+Choose Function 
+* It is introduce In SQL Server 2012
+* Returns the item at the specified index from the list of avilable values
+* The Index Position Starts at 1 and No To (Zero)
+
+Syntex: Choose (index, val_1, Val_2, ....)
+
+Exmple: Retuns the item at Index position 2
+
+SELECT CHOOSE(2, 'India', 'US', 'UK') AS Country
+select CHOOSE (1, 'a', 'b', 'c', 'd', 'e') as PIKEDDATA
+select CHOOSE (2, 'a', 'b', 'c', 'd', 'e') as PIKEDDATA_1
+select CHOOSE (3, 'a', 'b', 'c', 'd', 'e') as PIKEDDATA_2
+select CHOOSE (4, 'a', 'b', 'c', 'd', 'e') as PIKEDDATA_3
+select CHOOSE (5, 'a', 'b', 'c', 'd', 'e') as PIKEDDATA_4
+
+SELECT 
+    Name,
+    DateOfBirth,
+    CHOOSE(DATEPART(MM, DateOfBirth), 
+           'January', 'February', 'March', 'April', 
+           'May', 'June', 'July', 'August', 
+           'September', 'October', 'November', 'December') AS MONTHS
+FROM 
+    ContactData 
+ORDER BY 
+    DATEPART(MM, DateOfBirth);
+
+
+
+		Select Name,DateOfBirth,
+Case datepart (MM, DateOfBirth)
+when 1 then 'JAN' 
+when 2 then 'FEB' 
+when 3 then 'MAR' 
+when 4 then 'APR' 
+when 5 then 'MAY' 
+when 6 then 'JUN' 
+when 7 then 'JUL' 
+when 8 then 'AUG' 
+when 9 then 'SEP' 
+when 10 then 'OCT' 
+when 11 then 'NOV' 
+when 12 then 'DEC' 
+
+
+end as MONTHS
+	
+	from ContactData

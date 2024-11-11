@@ -1,0 +1,22 @@
+--sp_executesql is used to execute the dynamic SQL with the provided parameters.
+
+DECLARE @sql NVARCHAR(MAX);
+DECLARE @gender NVARCHAR(10);
+DECLARE @count INT;
+
+SET @gender = 'Male';
+
+-- Correcting the SQL string and syntax
+SET @sql = 'SELECT @count = COUNT(*) FROM Employees WHERE gender = @gender';
+
+-- Executing the dynamic SQL
+EXEC sp_executesql @sql,
+       N'@gender NVARCHAR(10), @count INT OUTPUT',
+       @gender, @count OUTPUT;
+
+-- Displaying the result
+SELECT @count;
+
+
+--Note: The OUTPUT parameter 
+--will not work as expected if you forget to use output keyword
